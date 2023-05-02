@@ -15,6 +15,23 @@ if (isset($_POST['try'])) {
 
     $dateVal = $day;
     $dropDate = date('m/d/Y', strtotime($dateVal. ' + ' . $days . ' days'));
+
+    $row = 1;
+    if (($handle = fopen("location.csv", "r")) !== FALSE) {
+        while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+            $num = count($data);
+            $row++;
+            for ($c=0; $c < $num; $c++) {
+                $eachData = explode('/', $data[$c]);
+                if (strpos($data[$c], "https://www.avis.com") !== false){
+                    $add = $eachData[count($eachData) - 1];
+                }
+            }
+        }
+        fclose($handle);
+    }
+
+
     
     $curl = curl_init();
     curl_setopt_array($curl, array(
@@ -61,7 +78,28 @@ if (isset($_POST['try'])) {
 
     curl_close($curl);
     $data = json_decode($response, false);
-    
+    echo "Pick Date: ";
+    echo $date;
+    echo "  Drop Date: ";
+    echo $dropDate;
+    echo "  City: ";
+    echo $data->reservationSummary->pickLoc->address->city;
+    echo "  Address: ";
+    echo $data->reservationSummary->pickLoc->address->address1;
+    echo $data->reservationSummary->pickLoc->address->city;
+    echo $data->reservationSummary->pickLoc->address->state;
+    echo $data->reservationSummary->pickLoc->address->zipCode;
+    echo $data->reservationSummary->pickLoc->address->country;
+    echo "  Class: ";
+    echo $data->vehicleSummaryList[0]->carGroup;
+    echo "  Type: ";
+    echo $data->vehicleSummaryList[0]->makeModel;
+    echo "  payNowPrice: ";
+    echo $data->vehicleSummaryList[0]->payNowRate->amount . $data->vehicleSummaryList[0]->payNowRate->currency;
+    echo "  payLaterPrice: ";
+    echo $data->vehicleSummaryList[0]->payLaterRate->amount . $data->vehicleSummaryList[0]->payLaterRate->currency;
+    echo "  Link: ";
+    echo $data->webHeader->p13nDetailsMap->referrer;
     }  
 } 
 ?>
