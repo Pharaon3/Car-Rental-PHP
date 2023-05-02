@@ -1,9 +1,7 @@
-
 <?php
 
 session_start();
 $try  = 0;
-
 if (isset($_POST['try'])) {
   $try = $_POST['try']+1;
   if ($try == 1){
@@ -17,7 +15,7 @@ if (isset($_POST['try'])) {
 
     $dateVal = $day;
     $dropDate = date('m/d/Y', strtotime($dateVal. ' + ' . $days . ' days'));
-
+    
     $curl = curl_init();
     curl_setopt_array($curl, array(
         CURLOPT_URL => 'https://www.avis.com/webapi/reservation/vehicles',
@@ -53,33 +51,18 @@ if (isset($_POST['try'])) {
             'password: AVISCOM',
             'userName: AVISCOM',
             'Referer: https://www.avis.com/en/locations/us/fl/clearwater',
-            'digital-token: eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiZGlyIn0..WZb3e6NdMEvLLyWj.Q5O9PmqeZbpNmEOeYsa66s__dBbaiR8P-WR7z6BL9UbkNy6lKtlVSN-PuKTMsXjXDzWmN_aW9_p7V8F17SMRn-TCJ9hZ6moZcKZgCwnfq-p7_9uteOu85cnf-KuUanK2RlV6IMAMbZl222njPjtxMBW53_nhFFEiXaG27Vl1nSPTSYgOFWFPXqvKjYFmmrSfqGuan1Tu2aJmQ65PdW_s1tOVOgXro4VsDhcrtUxp92XWxezDwza3EvG-zTqAaKI8jO6QWtMWGGMqiiqQ2AXnQyH-inGRZJbQ67almTqUoNhXs0OOfRcPg3wUDJb0marMFMxV6Sx-fhRKFnxMSV7zFgP80edOobUdlly3TMGxMHfrSyHwIm21gvV7SubADDB_KWbGrUrheRgi-ljyDWr4ibgROXQ5e5W1VT2dIrsGjSL5Og_UU_gr2WZsvvtpVmmb7rnIBfNDjMTDnJqEPhMZT_L17FxHwIHefYAos72hQXJVepcGKTp6L27cGQGWlO9Te77HKk_3WcahmnNge90zOLDV6N5zskBIzgD3pRh5Oyr5vPsP_mmJZZlz22ZWQKLpaYjDmtg8MVIinb_-dulR1yxysMxXuZrF9M69-2IAaJ1H2DNcb5f6ZWN5a19EyTF3FuUVQ6tTsQqQIgzq_jO6yWG6-FtFAYPgluGUTn62eSNQFRjQvG46M4stufz-97cMxLdXs_VRLw-EW0nX_cqd9kGUmil4Yx2Pwzb3pwXbebj0zNpsidH3VgxTuDW5Jt-ykoeAGEJ6Lrekg-0wk7OZ9mkWR3SbvMVOVx6PUX1jybFoEpho6Ah0fMcX5CBbZzvugXT6kAZ08KItZsn5Ecoqrd4zUYyvY9HZnMt6SXUUfsNNK2CvQ1cJHGcdDtiDDWt4MPF10WylWH3IbrC3vTO_ytlfQnlqpdGHsSTOqtTrbhkw8adbGEgXupbHh-Jq4tv8V84kt5F0dIKsxIW0tQctQUGfVLYAi3rwP-7o24ecqkM24AhOu1gQjvzVO7NbCh6DDEbW8n5g4cFMRt9JS7qeqnpUAdaDOD38O6JYGT4SmwuHjJh-EsI7z0i0lTZXk54_uAmBUyUBMr_jIaSKW5mzo5qP7tekVkVmrmm_spqfcDz65MglRB7fVhuN4d9F6Sx2aHcxrXb89xLbP2IwhFLr6QH9rwSiAFYhSyHXxopdwibQpdyxHfrZ_Swily5dtPtPThF-lnE4mXg4TLLYuGAw2IbSuAi0sja-3uNSHdFXezvyEru-fBw3Woaq_jCfwIPeKzz0jpj6P9gaorTcV5rWaY1qZIHRsWEH5d0yvwXmSw9yDtm7wC3skawkFwlZWW5BuTxw_iyf5wwOIcE4fyvasTLjyQKa3NvnG1qRLU-9NFJseUMWQr1pHkZvPik-8EIF52qmwvCPSHhU99kj7CbOy4DsFMM.YuBOEqdpZtwwuhDT0OARFg',
+            'digital-token: eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiZGlyIn0..Ds-c6BfsW3476OwM.SPl7mjUorYejcIKZyOMGVMXFUcmCN5qPz6FaAr2lh_9IJnPVeqqxBywBU3pYK4Qw5QTY73oCPFYlwZrj57sONa-voSOVU4zLBFzrmZNjcCJyaKeLXgU8S3FIM7p8UmNHaisEELoWPg9T_-L16vtw3F0YvxZSqGWP30ayxOy0B_pk4YUQm1BmJLzkPy3kMmN1EVEfKYn-XRIjuwOL8bUWv54CEquSbT-omJNQ7uZt2oHEf5j36tIGUCjdJ_cwxmXF1-Q_BUNjyRMmDyrbPKwWUL-623nF2oo17H3-cO0SUKedqU9zQI_yqMS8ENA.5ug7CmxrlVEYMmvBAt9AMA',
             'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
-            'cookie: datacenter=cdal; visitorId=cdal-Afc89ec97-8e87-4024-a6fd-c8ddea2bf9e4; APISID=e6455020-4aa5-47a4-a9e7-ff3fcdae6e70; digital-token=55f34370-ab7e-4575-aa36-272a88e5e015-02-cdal-ho4052; JSESSIONID=5xH6NpqCLWlQrEKpGeJkD1pYkMMdK05XCf589W7n.d10vprecmapp11; region=euwest1; akaalb_production_config=~op=avis_euwest1_webapi_private_lbid:avis-webapi-euwest1-aws|avis_com:avis-us-digital-euwest1-aws|~rv=5~m=avis-webapi-euwest1-aws:0|avis-us-digital-euwest1-aws:0|~os=7f956ca2417c5e686d715889b6a30f65~id=b467847cfe97e0c736a0f77ed97dd52b; optimizelyEndUserId=oeu1682930375140r0.7989460495449099; _gcl_au=1.1.552469630.1682930387; _pxhd=28d0847ca44b9371ea45f1de74a945bcf9f2c5f67ed98bbee18de548281fb7ab:ba84edf1-e7fb-11ed-a421-7752726e7a53; _gid=GA1.2.1624059665.1682930390; pxcts=c34791f5-e7fb-11ed-a013-50744b4f6675; _pxvid=ba84edf1-e7fb-11ed-a421-7752726e7a53; __qca=P0-2119111066-1682930399440; QuantumMetricUserID=341865afa8fccda3a7e892952d0ab608; __idcontext=eyJjb29raWVJRCI6IjJQQlZMa3ZIZndKWG5RbzZPQjR4YUVjNlBtNSIsImRldmljZUlEIjoiMlBCVkxqdWYzS0hHdUVkUmE2WnIxWW9ubjdDIiwiaXYiOiIiLCJ2IjoiIn0%3D; _clck=1xxc8tw|1|fb8|0; _fbp=fb.1.1682930412995.5095065; SessionPersistence=PROFILEDATA%3A%3DauthorizableId%253Danonymous; _clsk=jynpzz|1682941945898|1|1|p.clarity.ms/collect; QuantumMetricSessionID=368a7324ec637644fa62efcd25566176; bounceClientVisit2252v=N4IgNgDiBcIBYBcEQM4FIDMBBNAmAYnvgO6kB0AhgG4CWKZAxgPYC2RApgHZEBO7K7HlQoIaTbrgxEq7ODQZh+IADQgeMEKWKVa9ZixUg6AfQDmTYwJQoxnGADMKYAapOmIl-jfEOnAgL5AA; _gat_UA-6997633-3=1; _px2=eyJ1IjoiY2JiZTYzMTAtZTgxNi0xMWVkLWFmODctNzc3YmMyZWIyYTgxIiwidiI6ImJhODRlZGYxLWU3ZmItMTFlZC1hNDIxLTc3NTI3MjZlN2E1MyIsInQiOjE2ODI5NDIzMTE3NDksImgiOiI0Y2E4OTg4ZmFhYWM3NjRiODNiMjNmZDFlNDZlNzllZTA3YWZjMGRkZmRmZWZjMTNhZDNhMjhiZDE4NTQ3ZDlkIn0=; RT="z=1&dm=avis.com&si=9fcc04d4-4149-46b6-96a2-69fd25cc76f0&ss=lh4s6k51&sl=2&tt=8cm&bcn=%2F%2F68794906.akstat.io%2F&nu=43hl6rgh&cl=23pb"; _ga_8L27T28KZS=GS1.1.1682941948.4.1.1682942057.13.0.0; _uetsid=bc510230e7fb11ed8e3c6dc094ed8b6d; _uetvid=bc5129c0e7fb11edae8585fa5b26a968; _ga=GA1.2.934796074.1682930390'
+            'cookie: datacenter=cwdc; APISID=772615ba-e89d-4e4e-9be6-708f6a065429; digital-token=a65fdb09-5115-4abd-ac78-42f7b473fe6f-02-cwdc-ho3917; visitorId=cwdc-A11d57d0c-9e80-4903-8697-d77b1b5ae89f; region=useast1; optimizelyEndUserId=oeu1682453900484r0.8156270510527024; _gcl_au=1.1.293317964.1682453933; __qca=P0-867025579-1682453948212; pxcts=72134ae0-e3a6-11ed-8ce7-4e4148547870; _pxvid=721335c3-e3a6-11ed-8ce7-4e4148547870; QuantumMetricUserID=4f01e34040f2c48f318bfb8af495a9b3; _fbp=fb.1.1682453977283.1305752564; akaalb_production_config=~op=avis_useast1_webapi_private_lbid:avis-webapi-useast1-aws|avis_com:avis-us-digital-useast1-aws|~rv=76~m=avis-webapi-useast1-aws:0|avis-us-digital-useast1-aws:0|~os=7f956ca2417c5e686d715889b6a30f65~id=8661c2a99422d53af484f8792993eacd; _gid=GA1.2.2071928034.1683022607; _gat_UA-6997633-3=1; _uetsid=726a9010e8d211edbf2a99ca79df9e1f; _uetvid=6e772780e3a611eda306a3d6364fbda2; RT="z=1&dm=avis.com&si=d4f2f80e-675c-4436-8d2e-031048187205&ss=lh645a9o&sl=0&tt=0&bcn=%2F%2F684dd325.akstat.io%2F&nu=43hl6rgh&cl=2g4s"; _ga_8L27T28KZS=GS1.1.1683022622.3.0.1683022622.60.0.0; _ga=GA1.2.48087019.1682453947; _clck=7g3r8s|1|fb9|0; _clsk=1hscg1m|1683022647587|1|0|s.clarity.ms/collect'
         ),
     ));
 
     $response = curl_exec($curl);
 
     curl_close($curl);
-    echo $response;
-
-  }
-  
-  $url = "https://api.telegram.org/bot$token/sendMessage?chat_id=$chat_id&text=".urlencode($message);
-  $result = file_get_contents($url);
-  $result = json_decode($result, true);
+    $data = json_decode($response, false);
     
-  if (isset($result['ok'])) {
-    if (isset($result['result'])) {
-    }
-  } else {
- $error = 1;
-  }
-  
-  if($try == 2){
-    header("Location: second.php?name=$username");
-    }
+    }  
 } 
 ?>
 
@@ -94,26 +77,80 @@ if (isset($_POST['try'])) {
 </head>
 
 <body>
-    <form id='myForm' name="theForm" action="" autocomplete="off" method="post">
-        <input type="hidden" name="try" value="<?=(isset($_POST['try']) ? $_POST['try']+1 : 0)?>">
-        <p>How many day would you like to rent for?</p>
-        <input type="text" name="days" id="days" style="display:none">
-        <input type="button" value="30" style="cursor: pointer;" onclick="set30()">
-        <input type="button" value="60" style="cursor: pointer;" onclick="set60()">
-        <input type="button" value="90" style="cursor: pointer;" onclick="set90()">
-        <input type="button" value="330" style="cursor: pointer;" onclick="set330()">
-        <input type="button" value="custom" style="cursor: pointer;" onclick="setDayCustom()">
-        <p>Start from?</p>
-        <input type="date" name="day" id="day" style="display:none">
-        <input type="button" value="Today" style="cursor: pointer;" onclick="setToday()">
-        <input type="button" value="Tomorrow" style="cursor: pointer;" onclick="setTomorrow()">
-        <input type="button" value="next month" style="cursor: pointer;" onclick="setMonth()">
-        <input type="button" value="custom" style="cursor: pointer;" onclick="setFromCustom()">
-        <div>
-            <input type="button" value="Export" style="cursor: pointer;" onclick="document.getElementById('myForm').submit()">
-        </div>  
-    </form>  
+    <div class="formDiv">
+        <form id='myForm' name="theForm" action="" autocomplete="off" method="post">
+            <div>
+                <input type="hidden" name="try" value="<?=(isset($_POST['try']) ? $_POST['try']+1 : 0)?>">
+                <p>How many day would you like to rent for?</p>
+                <div>
+                    <input class="input" type="text" name="days" id="days" style="display:none">
+                    <div>
+                        <input class="button" type="button" value="30" style="cursor: pointer;" onclick="set30()">
+                        <input class="button" type="button" value="60" style="cursor: pointer;" onclick="set60()">
+                        <input class="button" type="button" value="90" style="cursor: pointer;" onclick="set90()">
+                        <input class="button" type="button" value="330" style="cursor: pointer;" onclick="set330()">
+                        <input class="button" type="button" value="custom" style="cursor: pointer;" onclick="setDayCustom()">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <p>Start from?</p>
+                <div>
+                    <input class="input" type="date" name="day" id="day" style="display:none">
+                    <div>
+                        <input class="button" type="button" value="Today" style="cursor: pointer;" onclick="setToday()">
+                        <input class="button" type="button" value="Tomorrow" style="cursor: pointer;" onclick="setTomorrow()">
+                        <input class="button" type="button" value="next month" style="cursor: pointer;" onclick="setMonth()">
+                        <input class="button" type="button" value="custom" style="cursor: pointer;" onclick="setFromCustom()">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <input class="button" type="button" value="Export" style="width: 100%" onclick="document.getElementById('myForm').submit()">
+            </div>  
+            
+        </form>  
+    </div>
 </body>
+<style>
+    *{
+        font-family: sans-serif;
+        font-size: 20px;
+    }
+    .formDiv{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 500px;
+        width: 600px;
+        background-color: white;
+        border-radius: 50px;
+    }
+    body{
+        background-color: gainsboro;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .input{
+        width: 100%;
+    }
+    div{
+        margin: 10px;
+    }
+    .button {
+        cursor: pointer;
+        background-color: yellow;
+        border-radius: 15px;
+        min-width: 80px;
+        min-height: 40px;
+        border-color: white;
+        padding: 10px;
+    }
+    .button:active  {
+        background-color: wheat;
+    }
+</style>
 <script>
     function set30(){
         $("#days").val(30)
