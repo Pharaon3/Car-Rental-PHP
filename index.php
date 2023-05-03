@@ -1,23 +1,8 @@
 <?php
 
-// require __DIR__ . '/vendor/autoload.php';
-
-// // configure the Google Client
-// $client = new \Google_Client();
-// $client->setApplicationName('Car Rental');
-// $client->setScopes([\Google_Service_Sheets::SPREADSHEETS]);
-// $client->setAccessType('offline');
-// // credentials.json is the key file we downloaded while setting up our Google Sheets API
-// $path = './credentials.json';
-// $client->setAuthConfig($path);
-
-// // configure the Sheets Service
-// $service = new \Google_Service_Sheets($client);
-
-// // the spreadsheet id can be found in the url https://docs.google.com/spreadsheets/d/143xVs9lPopFSF4eJQWloDYAndMor/edit
-// $spreadsheetId = '1y3bKqZbEkLsep2uWOzNlbDuFiKGys-DaeYqNugNJP8k';
-// $spreadsheet = $service->spreadsheets->get($spreadsheetId);
-// var_dump($spreadsheet);
+$mycookie = 'datacenter=cwdc; visitorId=cwdc-A11d57d0c-9e80-4903-8697-d77b1b5ae89f; APISID=4bb09491-fcb5-45d6-85df-748dbd05206e; JSESSIONID=T2kh2_o5WwbwvGYuWJ87GpU8zgU-ZOacFmQ1qsk9.w04vprecmapp01; digital-token=97967319-b309-4821-ba92-62f8eb0ac14c-01-cwdc-mr4210; region=useast1; optimizelyEndUserId=oeu1682453900484r0.8156270510527024; _gcl_au=1.1.293317964.1682453933; __qca=P0-867025579-1682453948212; pxcts=72134ae0-e3a6-11ed-8ce7-4e4148547870; _pxvid=721335c3-e3a6-11ed-8ce7-4e4148547870; QuantumMetricUserID=4f01e34040f2c48f318bfb8af495a9b3; _fbp=fb.1.1682453977283.1305752564; akaalb_production_config=~op=avis_useast1_webapi_private_lbid:avis-webapi-useast1-aws|avis_com:avis-us-digital-useast1-aws|~rv=76~m=avis-webapi-useast1-aws:0|avis-us-digital-useast1-aws:0|~os=7f956ca2417c5e686d715889b6a30f65~id=8661c2a99422d53af484f8792993eacd; _gid=GA1.2.2071928034.1683022607; _pxhd=7ce3f1782a4dc1f72337e94634a8050116935e393a1c8fb16a19ec4eb94a5573:721335c3-e3a6-11ed-8ce7-4e4148547870; SessionPersistence=PROFILEDATA%3A%3DauthorizableId%253Danonymous; _clck=7g3r8s|1|fba|0; _clsk=1t76pb|1683116117260|2|1|s.clarity.ms/collect; _uetsid=726a9010e8d211edbf2a99ca79df9e1f; _uetvid=6e772780e3a611eda306a3d6364fbda2; _ga_8L27T28KZS=GS1.1.1683115626.11.1.1683117894.60.0.0; _ga=GA1.1.48087019.1682453947; RT="z=1&dm=avis.com&si=d4f2f80e-675c-4436-8d2e-031048187205&ss=lh7nkj08&sl=5&tt=1a3l&bcn=%2F%2F0217991d.akstat.io%2F&obo=1"';
+$digitoken = 'eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiZGlyIn0..etZaDZtt9aqkWikQ.YwRF3dZJH0OxFpOBU3s3uOi2i-PhrXMXpL4ItN3_eTUrj2HKznkofMkoybzUNWe43Y4NftDUT7RB4MmFiWbbev5DYx5xpZKaRTH-mwBae3JnIOKNrHk32n8Ga1GzBvYdldZtybVYoU96YtuXB2GYROtNej1rT9LxAGh9YpU5xMlU2tVHKIQ-wt9knGnzwTTwqf80jq3GGiLjnPTkJEu0uKr-LLrhKVGfELq6meX863bPBMMZEnsj_G1J4dlfsvvajVdWPmD4QJXH5p8ogyk3nc1b0tEWiW89UAFWnD-q1degDGYIu-9m7tRkOXw.36OJxe50Z4PAgPy_E7H93g';
+$sheetLink = 'https://script.google.com/macros/s/AKfycbxR9OBxf0v5zjVfSG-zsYnkmqLnzyklqJ8bW2ZTRUctHpFT4Sw4FKuR-6l12en89nQ/exec';
 
 
 session_start();
@@ -80,9 +65,9 @@ if (isset($_POST['try'])) {
                             'password: AVISCOM',
                             'userName: AVISCOM',
                             'Referer: https://www.avis.com/en/locations/us/fl/clearwater',
-                            'digital-token: eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiZGlyIn0..zOBfTum7_3TzjrDh.a0IyI6X4CSDQgHeL5FOdrUv2NlIsxBdFYctnhplYvCePQQqtkOlXvVKcgLn3z3XtuD-Bnz3Y2Hx6IWxQ8yuhMmUs3vBgUFGL9osoVGRgclkJHVdFPY8ZZp8yaIfjLl1ug24c3G3EoU_K4Gy5nENdBTG7lT--07pAhyjQefbQmqJtbl6hzwD36onjNsf-ducILpo-PC1VigFAIwsve_6z4z9sp0cCQcixLqHMtvW6Afzg0H7NpCDcKkBhb_9jVIyiBOQVhsXMoFvv3cgtPhNjrWqITCoMqPICQ99AGst5DJtEhiioxKKmr3uYzdtBXHqxGyJAhSPZKti-_QjvGb41yHENj89FzAtuI2aC_a9Nguj5keSU25iG4vVBr_HP-rVK09ovU_vEKwVKXl02oFBYAHUPZrmPm_jQ1O8FEiLbkV6ZLUfK61IAX_G21SvMxVoex2FLhkD7tPvNSkPgbUdDx786DWbgwJuE0V1-THdg0SIGHbAP8AbnyM6PVvxdQang23B99UqYrHjmJhDRuqyCXoPLbY80Nojj_YJzWdm5nNe6B7i9aVUlux535457q8C6dllEuzSFkjGXIYCkpJ6zBwk0v_iksztjcuaGR87xq0iTJ0HSIr2Kpkqjyce9QdFCEl-xMWPsgEkU2hO13okkOifr4sgbrVgQvlz2NghpRXIHHDUajPBaDa3UCS-nfPkFjFg13VuQFfcHjxQBO1nSxzl3pAVmHAxS8SxbqAM2Cnf-ZGN9ViRjVkNFBc1itdmKLS1hHRljIDx09jAZI8KwPwMpOKiTcGhpVHC5-6fz6y6TZJhHdG63-RZE-exKhzIA1Hup4DVvzzcaKxOeZNzbQ1GSiF8ebV6T0JjXRURJJ_bd7lg49taGXpN039FBvp29HTLZnqL-guHkhT9zN9Gz-HjFJ1Rnk_ClIDiVi0ECXzUMjY9ToC2FG16UyHsojvBSAwDIcMN-leN6y-Rdwp40PtbY-_9EV5WIawcOL023cKlkPUe5uwEGWNPTKqmv1oKorKEzvUrLLrmCLxtMsJ7GIX0CaGfiMs6UiJWq7oxwWR3OHEGByVmDK7MIcLO7i-fa1k8idh5JN04via7Xit4odHe162LV4kxnUuzmzAMRjNuBhypLrVk5se99lEebxvvXK8kmPMYlVZNKpHc9Ie4uJBuDzLrMVcylxZ2iqsWTSW_gW2HOUxRyPaMXM-hYsyzRj0KOfljr5pu32nbf-xi7Bb4SSGhkKhpkQ8Dgs96Uge1THbo1vzK9l2UGojnFl9xeKDk2ntH7rPZVszMs1PNneN5CV7yQUgMiB6IVXR-0GakVZrA52KeJQyWAUvBZuRT4VHRzXUvhAWSqiAw-ro3uoEPGw6xQtLCsNQGszqOVfj77ts6pWkAk1MWCFO_ZeUTwFvPyFqaXfoawnd8pTqcCeGDjiA.aLIdykg1yU_RMdtyAt63Ow',
+                            'digital-token: ' . $digitoken,
                             'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
-                            'cookie: datacenter=cwdc; visitorId=cwdc-A11d57d0c-9e80-4903-8697-d77b1b5ae89f; APISID=cdec4fc0-3261-4dcd-b2f2-95a593282f6f; digital-token=c3f04370-5924-4e5d-a64b-3c8fc7be8384-11-cwdc-ho4106; JSESSIONID=T2kh2_o5WwbwvGYuWJ87GpU8zgU-ZOacFmQ1qsk9.w04vprecmapp01; region=useast1; optimizelyEndUserId=oeu1682453900484r0.8156270510527024; _gcl_au=1.1.293317964.1682453933; __qca=P0-867025579-1682453948212; pxcts=72134ae0-e3a6-11ed-8ce7-4e4148547870; _pxvid=721335c3-e3a6-11ed-8ce7-4e4148547870; QuantumMetricUserID=4f01e34040f2c48f318bfb8af495a9b3; _fbp=fb.1.1682453977283.1305752564; akaalb_production_config=~op=avis_useast1_webapi_private_lbid:avis-webapi-useast1-aws|avis_com:avis-us-digital-useast1-aws|~rv=76~m=avis-webapi-useast1-aws:0|avis-us-digital-useast1-aws:0|~os=7f956ca2417c5e686d715889b6a30f65~id=8661c2a99422d53af484f8792993eacd; _gid=GA1.2.2071928034.1683022607; _pxhd=7ce3f1782a4dc1f72337e94634a8050116935e393a1c8fb16a19ec4eb94a5573:721335c3-e3a6-11ed-8ce7-4e4148547870; SessionPersistence=PROFILEDATA%3A%3DauthorizableId%253Danonymous; _clck=7g3r8s|1|fba|0; QuantumMetricSessionID=bf0c74a977256513505a3b7bc1d75a67; bounceClientVisit2252v=N4IgNgDiBcIBYBcEQM4FIDMBBNAmAYnvgO6kB0AhgG4CWKZAxgPYC2RApgHZEBO7K7HlQoIaTbrgxEq7ODQZh+IADQgeMEKWKVa9ZixUg6AfQDmTYwJQoxnGADMKYAapOmIl-jfEOnAgL5AA; _px2=eyJ1IjoiMDVkMWFjMjAtZTlhYi0xMWVkLTg4NTctZGRkN2U0NDI0YmQxIiwidiI6IjcyMTMzNWMzLWUzYTYtMTFlZC04Y2U3LTRlNDE0ODU0Nzg3MCIsInQiOjE2ODMxMTY0MTI4ODQsImgiOiI3MzljY2M2NjM0YmIyOGJkZTU0ZmEwNzhjNDBmNzEzYTcwYjI1ZmI4ZTFhNjY0OTEzYTI5MTI1YTNhZjUyNTYxIn0=; _clsk=1t76pb|1683116117260|2|1|s.clarity.ms/collect; RT="z=1&dm=avis.com&si=d4f2f80e-675c-4436-8d2e-031048187205&ss=lh7nkj08&sl=1&tt=1hx&bcn=%2F%2F0217991d.akstat.io%2F&nu=43hl6rgh&cl=conc"; _gat_UA-6997633-3=1; _ga_8L27T28KZS=GS1.1.1683115626.11.1.1683116201.7.0.0; _uetsid=726a9010e8d211edbf2a99ca79df9e1f; _uetvid=6e772780e3a611eda306a3d6364fbda2; _ga=GA1.2.48087019.1682453947'
+                            'cookie: ' . $mycookie
                         ),
                     ));
 
@@ -123,7 +108,7 @@ if (isset($_POST['try'])) {
                         $curl1 = curl_init();
 
                         curl_setopt_array($curl1, array(
-                            CURLOPT_URL => 'https://script.google.com/macros/s/AKfycbyR4KDri1HYZHQNhRCu78sz5rJQ1PFP225YwlDCQvLLoSQ_duubNPlgC-jBsfbbrqvT/exec',
+                            CURLOPT_URL => $sheetLink,
                             CURLOPT_RETURNTRANSFER => true,
                             CURLOPT_ENCODING => '',
                             CURLOPT_MAXREDIRS => 10,
