@@ -150,8 +150,8 @@ if (isset($_POST['try'])) {
 
 
 
-                        echo "Pick Date: ";
-                        echo $date . "<br>";
+                        // echo "Pick Date: ";
+                        // echo $date . "<br>";
                         // echo "  Drop Date: ";
                         // echo $dropDate . "<br>";
                         // echo "  Location Code: ";
@@ -162,16 +162,16 @@ if (isset($_POST['try'])) {
                         // echo $data->reservationSummary->pickLoc->address->city . "<br>";
                         // echo "  Address: ";
                         // echo $data->reservationSummary->pickLoc->address->address1 . "<br>";
-                        echo "  Full address: ";
-                        echo $data->reservationSummary->pickLoc->address->address1 . " ";
-                        echo $data->reservationSummary->pickLoc->address->city . " ";
-                        echo $data->reservationSummary->pickLoc->address->state . " ";
-                        echo $data->reservationSummary->pickLoc->address->zipCode . " ";
-                        echo $data->reservationSummary->pickLoc->address->country . "<br>";
-                        echo "  Class: ";
-                        echo $data->vehicleSummaryList[$ca]->carGroup . "<br>";
-                        echo "  Type: ";
-                        echo $data->vehicleSummaryList[$ca]->makeModel . "<br>";
+                        // echo "  Full address: ";
+                        // echo $data->reservationSummary->pickLoc->address->address1 . " ";
+                        // echo $data->reservationSummary->pickLoc->address->city . " ";
+                        // echo $data->reservationSummary->pickLoc->address->state . " ";
+                        // echo $data->reservationSummary->pickLoc->address->zipCode . " ";
+                        // echo $data->reservationSummary->pickLoc->address->country . "<br>";
+                        // echo "  Class: ";
+                        // echo $data->vehicleSummaryList[$ca]->carGroup . "<br>";
+                        // echo "  Type: ";
+                        // echo $data->vehicleSummaryList[$ca]->makeModel . "<br>";
                         // echo "  payNowPrice: ";
                         // echo $data->vehicleSummaryList[$ca]->payNowRate->amount . $data->vehicleSummaryList[$ca]->payNowRate->currency . "<br>";
                         // echo "  payLaterPrice: ";
