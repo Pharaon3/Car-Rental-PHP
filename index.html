@@ -1,296 +1,135 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Car Rental Information</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-  </head>
 
-  <body>
+<head>
+    <title>
+        Car Rental Information
+    </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+
+<body>
     <div class="formDiv">
-      <form
-        id="myForm"
-        name="theForm"
-        action=""
-        autocomplete="off"
-        method="post"
-      >
-        <div>
-          <input type="hidden" name="try" value="" />
-          <p>How many day would you like to rent for?</p>
-          <div>
-            <input
-              class="input"
-              type="text"
-              name="days"
-              id="days"
-              style="display: none"
-            />
+        <!-- <form id='myForm' name="theForm" action="https://creatuportada.em.uy/car/api.php" autocomplete="off" method="post"> -->
             <div>
-              <input
-                class="button"
-                type="button"
-                value="30"
-                style="cursor: pointer"
-                onclick="set30()"
-                id="set301"
-              />
-              <input
-                class="button"
-                type="button"
-                value="60"
-                style="cursor: pointer"
-                onclick="set60()"
-                id="set601"
-              />
-              <input
-                class="button"
-                type="button"
-                value="90"
-                style="cursor: pointer"
-                onclick="set90()"
-                id="set901"
-              />
-              <input
-                class="button"
-                type="button"
-                value="330"
-                style="cursor: pointer"
-                onclick="set330()"
-                id="set3301"
-              />
-              <input
-                class="button"
-                type="button"
-                value="custom"
-                style="cursor: pointer"
-                onclick="setDayCustom()"
-              />
+                <p>How many day would you like to rent for?</p>
+                <div>
+                    <input class="input" type="text" name="days" id="days" style="display:none">
+                    <div>
+                        <input class="button" type="button" value="30" style="cursor: pointer;" onclick="set30()" id="set301">
+                        <input class="button" type="button" value="60" style="cursor: pointer;" onclick="set60()" id="set601">
+                        <input class="button" type="button" value="90" style="cursor: pointer;" onclick="set90()" id="set901">
+                        <input class="button" type="button" value="330" style="cursor: pointer;" onclick="set330()" id="set3301">
+                        <input class="button" type="button" value="custom" style="cursor: pointer;" onclick="setDayCustom()">
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div>
-          <p>Start from?</p>
-          <div>
-            <input
-              class="input"
-              type="date"
-              name="day"
-              id="day"
-              style="display: none"
-            />
             <div>
-              <input
-                class="button"
-                type="button"
-                value="Today"
-                style="cursor: pointer"
-                onclick="setToday()"
-                id="setToday"
-                disabled
-              />
-              <input
-                class="button"
-                type="button"
-                value="Tomorrow"
-                style="cursor: pointer"
-                onclick="setTomorrow()"
-                id="setTomorrow"
-                disabled
-              />
-              <input
-                class="button"
-                type="button"
-                value="next month"
-                style="cursor: pointer"
-                onclick="setMonth()"
-                id="setMonth"
-                disabled
-              />
-              <input
-                class="button"
-                type="button"
-                value="custom"
-                style="cursor: pointer"
-                onclick="setFromCustom()"
-              />
+                <p>Start from?</p>
+                <div>
+                    <input class="input" type="date" name="day" id="day" style="display:none">
+                    <div>
+                        <input class="button" type="button" value="Today" style="cursor: pointer;" onclick="setToday()" id="setToday" disabled>
+                        <input class="button" type="button" value="Tomorrow" style="cursor: pointer;" onclick="setTomorrow()" id="setTomorrow" disabled>
+                        <input class="button" type="button" value="next month" style="cursor: pointer;" onclick="setMonth()" id="setMonth" disabled>
+                        <input class="button" type="button" value="custom" style="cursor: pointer;" onclick="setFromCustom()">
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div>
-          <input
-            class="button"
-            type="button"
-            value="Export"
-            style="width: 100%"
-            onclick="document.getElementById('myForm').submit()"
-          />
-        </div>
-      </form>
+            <div>
+                <input class="button" type="button" value="Export" style="width: 100%" onclick="submit()">
+            </div>  
+        <!-- </form>   -->
     </div>
-  </body>
-  <style>
-    * {
-      font-family: sans-serif;
-      font-size: 20px;
+</body>
+<style>
+    *{
+        font-family: sans-serif;
+        font-size: 20px;
     }
-    .formDiv {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 500px;
-      width: 600px;
-      background-color: white;
-      border-radius: 50px;
+    .formDiv{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 500px;
+        width: 600px;
+        background-color: white;
+        border-radius: 50px;
     }
-    body {
-      background-color: gainsboro;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    body{
+        background-color: gainsboro;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-    .input {
-      width: 100%;
+    .input{
+        width: 100%;
     }
-    div {
-      margin: 10px;
+    div{
+        margin: 10px;
     }
     .button {
-      cursor: pointer;
-      background-color: yellow;
-      border-radius: 15px;
-      min-width: 80px;
-      min-height: 40px;
-      border-color: white;
-      padding: 10px;
+        cursor: pointer;
+        background-color: yellow;
+        border-radius: 15px;
+        min-width: 80px;
+        min-height: 40px;
+        border-color: white;
+        padding: 10px;
     }
-    .button:active {
-      background-color: wheat;
+    .button:active  {
+        background-color: wheat;
     }
-  </style>
-  <script>
-    function set30() {
-      $("#days").val(30);
-      resetDay();
-      $("#set301").css("background-color", "darkorange");
+</style>
+<script>
+    function set30(){
+        $("#days").val(30)
+        resetDay()
+        $("#set301").css("background-color", "darkorange")
     }
-    function set60() {
-      $("#days").val(60);
-      resetDay();
-      $("#set601").css("background-color", "darkorange");
+    function set60(){
+        $("#days").val(60)
+        resetDay()
+        $("#set601").css("background-color", "darkorange")
     }
-    function set90() {
-      $("#days").val(90);
-      resetDay();
-      $("#set901").css("background-color", "darkorange");
+    function set90(){
+        $("#days").val(90)
+        resetDay()
+        $("#set901").css("background-color", "darkorange")
     }
-    function set330() {
-      $("#days").val(330);
-      resetDay();
-      $("#set3301").css("background-color", "darkorange");
+    function set330(){
+        $("#days").val(330)
+        resetDay()
+        $("#set3301").css("background-color", "darkorange")
     }
-    function setDayCustom() {
-      $("#days").css("display", "block");
-      resetDay();
+    function setDayCustom(){
+        $("#days").css("display", "block")
+        resetDay()
     }
     function resetDay() {
-      $("#set301").css("background-color", "yellow");
-      $("#set601").css("background-color", "yellow");
-      $("#set901").css("background-color", "yellow");
-      $("#set3301").css("background-color", "yellow");
+        $("#set301").css("background-color", "yellow")
+        $("#set601").css("background-color", "yellow")
+        $("#set901").css("background-color", "yellow")
+        $("#set3301").css("background-color", "yellow")
     }
-    function setToday() {
-      var datepicker = $("#day");
-      // datepicker.datepicker();
-      datepicker.datepicker("setDate", new Date());
+    function setToday(){
+        var datepicker = $('#day');
+        // datepicker.datepicker();
+        datepicker.datepicker('setDate', new Date());
     }
-    function setFromCustom() {
-      $("#day").css("display", "block");
+    function setFromCustom(){
+        $("#day").css("display", "block")
     }
-  </script>
-</html>
-
-<script>
-  var myHeaders = new Headers();
-  myHeaders.append("accept", "application/json, text/plain, */*");
-  myHeaders.append("accept-encoding", "gzip, deflate, br");
-  myHeaders.append("accept-language", "en-US,en;q=0.9");
-  myHeaders.append("bookingtype", "car");
-  myHeaders.append("channel", "Digital");
-  myHeaders.append("content-length", "622");
-  myHeaders.append("content-type", "application/json");
-  myHeaders.append(
-    "cookie",
-    'datacenter=cdal; visitorId=cdal-A2616b165-e306-413c-96cb-3e75d620cdb3; APISID=0a31552e-dced-4b64-9aab-d543eef982fc; digital-token=11b3a286-dedf-4d27-bb09-104812450ba3-11-cdal-ho4056; region=euwest1; SessionPersistence=PROFILEDATA%3A%3DauthorizableId%253Danonymous; akaalb_production_config=~op=avis_euwest1_webapi_private_lbid:avis-webapi-euwest1-aws|avis_com:avis-us-digital-euwest1-aws|~rv=9~m=avis-webapi-euwest1-aws:0|avis-us-digital-euwest1-aws:0|~os=7f956ca2417c5e686d715889b6a30f65~id=6e5d5be5931121bc1853c2fb18a95f8d; optimizelyEndUserId=oeu1683431435249r0.8101969281957939; _gcl_au=1.1.1031513463.1683431438; pxcts=56a0322c-ec8a-11ed-85fe-5a5958754467; _pxvid=56a023e7-ec8a-11ed-85fe-5a5958754467; __qca=P0-1779038743-1683431441885; _fbp=fb.1.1683431476475.33122265; __idcontext=eyJjb29raWVJRCI6IjJQUnQwRHR5UXFHUEYybmxjejBSWDZQQ1dudSIsImRldmljZUlEIjoiMlBSdDBDQlpDdUtnZFVWMEJqTzZYWXpOS1dmIiwiaXYiOiIiLCJ2IjoiIn0%3D; QuantumMetricUserID=0785695ee308c242b7b4e54c0e4939f4; _gid=GA1.2.1804242264.1683547000; _pxhd=2210cdd1c657d5e102606c320f4b4c19a55fd9efaffa3390827d6cddc72ad49e:56a023e7-ec8a-11ed-85fe-5a5958754467; QuantumMetricSessionID=b52ebc4adf32ac96682ef631cd2ddd66; _gat_UA-6997633-3=1; _uetsid=7046f2f0ed9711ed81cfffaea830918b; _uetvid=55f72540ec8a11edb756b7a649f18b14; _ga_8L27T28KZS=GS1.1.1683547008.2.1.1683549112.55.0.0; _px2=eyJ1IjoiNTE0MDQxNDAtZWQ5Yy0xMWVkLTg1NTQtNDFhYTAzNzFmMTBjIiwidiI6IjU2YTAyM2U3LWVjOGEtMTFlZC04NWZlLTVhNTk1ODc1NDQ2NyIsInQiOjE2ODM1NDk0MTc5MzYsImgiOiIwNjM5YTMxYjhlYWE3OTBhNWE2NDQ1ZWUzODEwYzMxZDk3MzE4MTBkODMyMGNlNGRiNTg0ODI5NjZkYmQzYjA2In0=; _ga=GA1.2.1163021244.1683431440; RT="z=1&dm=avis.com&si=85794183-e111-4420-992a-db7eb7c72171&ss=lhesf4pg&sl=3&tt=1ihb&bcn=%2F%2F68794907.akstat.io%2F&ld=199bt&nu=43hl6rgh&cl=19ap8"; APISID=f0aff9f9-cc79-46cc-bd12-4da122cdecbf; JSESSIONID=pmtD-R-4-xva2MAHbJdaClp_I0qbDz2znVXAFgIZ.d10vprecmapp11; datacenter=cdal; digital-token=11b3a286-dedf-4d27-bb09-104812450ba3-11-cdal-ho4056; _pxhd=2210cdd1c657d5e102606c320f4b4c19a55fd9efaffa3390827d6cddc72ad49e:56a023e7-ec8a-11ed-85fe-5a5958754467'
-  );
-  myHeaders.append("devicetype", "bigbrowser");
-  myHeaders.append(
-    "digital-token",
-    "eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiZGlyIn0..gtZl05J9jj-9uZLb.3_uKOyQ1k4buwOHcB6qe0rNmp-ZM2DuZz1qcQFLS4g7F1QyJYg_YnD5YH5B4ibwxB158wCfwgkYcAEkB2bJfrNwwaXSyGhNkdrZDU-5r2dNHItXaljcpEC4pqIXX3fFdftWxdct1p4pQyBzisRl-U2h0q0TqmOK580MapLmpURdoBGqiWrm98bbjT5H9M2RVGBfU0p9-wBvN8wtbd0s6TG2-HsiPhuBiMkyJlsUxJK2FGqvFWaOEMFCOsZBnuv2T24NrZaFBd9xuR3_a7_qeoZ5LDc1Y-3zxicvFQ_XSKa8BXAwLH3p2N8FhAj9KSXimroqDSmd7am-2Y00BngI6qiC92tjRSRvxxCYMJA8TCCEyjAWy3yBgFrUOjutGO6Z9dW0jGLiAk4IhRSws09DJBj4sP2fpufyxT8qyuokzFrJ9rHlgNmnAJ_-M_euhlnvrtIP7PS6sopCd-NU28m0jMtPFsmvByAX3Xr-r3-AgSD-BOin3buSzkLwJ0yjEPrarX81-YcVqShHhRyRD9DlUZaLoMv_oYQZnQmapmLL71pzWuSkVYLZSVDzAd2m89O5M9VaPYYc5v7aXLoKBAZ9Vsiyk9VcXsGwv5wdurlc_WyGYhyjH3llROSVtmmCFSdCu3p5sTlfhJnL2jPmNaey6lbFW0noX-YLyd-3oDrO7_ibO8n-z-KZrAdnwR-sTfoRTsYO_ig0hE87TecpKj-_bszfzsdKHTNzI-lnBUaZGyM8vq-1pvCBZ0TI14I254j69SsbG_ddVmb9QyXqGvX6EuCP7NAX--tqqSYj9cpAC5ysVwDHKNm9-4Iz194fReT6A4s8cDsAdZUuG_SBd0yBkDrGYzyb1b3q2v9O49NXK4dXF6l_3325QMLh4ODLPRz5fBbleY5_nwnCoXP2v4QFUCVZNjBfgFsMpnrBQtNEfLPX7s7tijiFYsBMBX5P00z2kCFPdYNnXGSNfS_oriGk6Fjm9SarPhmPipVZAwaCCObjpe_SancnwTLeBXkXS2upFe1wqUROe_3N3nJF-KLXC0wdMYZ2Jy50-pTfPFU7xGFhorfa89DEtenytm8mKOqPrpitZ8HfWpFYls0MYH1Y9I5uUwspgFqNGDj3FJMBq-ra5NW5GPkCUMG_JuasqpQehB9ydbE0L_VBZuk1RII3wSoPkn2gRHxsATljixDKf47PuzpPbI6p5GTZC4NmNlKy0dgsyvIFtezYqnqVIfIwMsNv08OI2gk1ahDw3dMvWocLgqUOTgtOnVE6SaDzhBHgL-2E9GltLKKKl7Ma2OOEdMBp0dQ145ewQeLCMXgEzgRP3xdWA4rIlNZ4AUoJDOs5KCrpjRc7i-W7ewm-RTR4uW9ARK16aECD2iD4SDArAqwqmzlTilhEMeRRP5MsAYl9OLMXcF5_q9fpfCVUpL6Jf6apGgtibk-hS._JHxu-h_ubqSZYUUDBeK1A"
-  );
-  myHeaders.append("domain", "us");
-  myHeaders.append("initreservation", "true");
-  myHeaders.append("locale", "en");
-  myHeaders.append("origin", "https://www.avis.com");
-  myHeaders.append("password", "AVISCOM");
-  myHeaders.append("referer", "https://www.avis.com/en/home");
-  myHeaders.append(
-    "sec-ch-ua",
-    '"Chromium";v="112", "Google Chrome";v="112", "Not:A-Brand";v="99"'
-  );
-  myHeaders.append("sec-ch-ua-mobile", "?0");
-  myHeaders.append("sec-ch-ua-platform", '"Windows"');
-  myHeaders.append("sec-fetch-dest", "empty");
-  myHeaders.append("sec-fetch-mode", "cors");
-  myHeaders.append("sec-fetch-site", "same-origin");
-  myHeaders.append(
-    "user-agent",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
-  );
-  myHeaders.append("username", "AVISCOM");
-
-  var raw = JSON.stringify({
-    rqHeader: {
-      brand: "",
-      locale: "en_US",
-    },
-    nonUSShop: false,
-    pickInfo: "ANB",
-    pickDate: "05/09/2023",
-    pickTime: "12:00 PM",
-    dropInfo: "ANB",
-    dropDate: "05/20/2023",
-    dropTime: "12:00 PM",
-    couponNumber: "",
-    couponInstances: "",
-    couponRateCode: "",
-    discountNumber: "",
-    rateType: "",
-    residency: "US",
-    age: 25,
-    wizardNumber: "",
-    lastName: "",
-    userSelectedCurrency: "",
-    selDiscountNum: "",
-    promotionalCoupon: "",
-    preferredCarClass: "",
-    membershipId: "",
-    noMembershipAvailable: false,
-    corporateBookingType: "",
-    enableStrikethrough: "true",
-    amazonGCPayLaterPercentageVal: "",
-    amazonGCPayNowPercentageVal: "",
-    corporateEmailID: "",
-  });
-
-  var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
-
-  fetch("https://www.avis.com/webapi/reservation/vehicles", requestOptions)
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+    function submit(){
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById("demo").innerHTML =
+          this.responseText;
+        }
+      };
+      xhttp.open("POST", "https://creatuportada.em.uy/car/api.php", true);
+      xhttp.send();
+    }
 </script>
+</html>
