@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <title>Car Rental Information</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
   </head>
@@ -237,7 +238,7 @@
     var sucRes = 0;
     var failedRes = 0;
     total = 0;
-    var timeInterval = 10;
+    var timeInterval = 100;
     function readCsv() {
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function () {
@@ -295,7 +296,8 @@
           isSet = false;
           errcount = 0;
           timeInterval = 1000;
-          // sendgooglesheet();
+          sendgooglesheet();
+          countdown1();
         }
         return;
       }
@@ -305,7 +307,7 @@
       xhttp1.onreadystatechange = function () {
         if (this.readyState == 4) {
           if (this.status == 200) {
-            console.log(suc + "/" + total);
+            // console.log(suc + "/" + total);
             suc = suc + 1;
             $("#getbar").css("width", (suc * 100) / total + "%");
             responses.push(this.responseText);
@@ -349,36 +351,43 @@
     function countdown() {
       var interval = setInterval(function () {
         submitbulk();
-        setdata();
+        // setdata();
         delayTime ++;
         if(delayTime > 10000) delayTime = 0;
         if(delayTime % 100 == 0) {
           reGet();
-          reSet();
+          // reSet();
         }
       }, timeInterval);
     }
+    function countdown1() {
+      var interval1 = setInterval(function () {
+        setdata();
+      }, 5000);
+    }
 
     function sendgooglesheet() {
-      while (responses.length) {
-        var response = responses[0];
-        responses.shift();
-        var settings = {
-          url: "https://creatuportada.em.uy/car/setapi.php?response=" + response,
-          method: "GET",
-          timeout: 0,
-        };
-
-        $.ajax(settings).done(function (response) {
-          console.log(response);
-        });
-      }
+      var xhttp3 = new XMLHttpRequest();
+      xhttp3.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          if (this.status == 200) {
+          } else {
+          }
+        }
+      };
+      apiInput = JSON.stringify(responses);
+      xhttp3.open(
+        "GET",
+        "https://creatuportada.em.uy/car/setallapi.php?response=" + apiInput,
+        true
+      );
+      xhttp3.send();
     }
 
     function setdata() {
       if (!canSet) return;
       if (responses.length == 0) {
-        if (failedRes + sucRes > responsetotal - 10) {
+        if (failedRes + sucRes > responsetotal - 2) {
           console.log("=====================SET END====================");
           canSet = false;
         }
