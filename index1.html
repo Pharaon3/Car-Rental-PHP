@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Car Rental Information</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <div class="formDiv">
+      <div id="myForm">
+        <div>
+          <p>How many day would you like to rent for?</p>
+          <div>
+            <input
+              class="input"
+              type="text"
+              name="days"
+              id="days"
+              style="display: none"
+            />
+            <div>
+              <input
+                class="button"
+                type="button"
+                value="30"
+                style="cursor: pointer"
+                onclick="set30()"
+                id="set301"
+              />
+              <input
+                class="button"
+                type="button"
+                value="60"
+                style="cursor: pointer"
+                onclick="set60()"
+                id="set601"
+              />
+              <input
+                class="button"
+                type="button"
+                value="90"
+                style="cursor: pointer"
+                onclick="set90()"
+                id="set901"
+              />
+              <input
+                class="button"
+                type="button"
+                value="330"
+                style="cursor: pointer"
+                onclick="set330()"
+                id="set3301"
+              />
+              <input
+                class="button"
+                type="button"
+                value="custom"
+                style="cursor: pointer"
+                onclick="setDayCustom()"
+              />
+            </div>
+          </div>
+        </div>
+        <div>
+          <p>Start from?</p>
+          <div>
+            <input
+              class="input"
+              type="date"
+              name="day"
+              id="day"
+              style="display: none"
+            />
+            <div>
+              <input
+                class="button"
+                type="button"
+                value="Today"
+                style="cursor: pointer"
+                onclick="setToday()"
+                id="setToday"
+                disabled
+              />
+              <input
+                class="button"
+                type="button"
+                value="Tomorrow"
+                style="cursor: pointer"
+                onclick="setTomorrow()"
+                id="setTomorrow"
+                disabled
+              />
+              <input
+                class="button"
+                type="button"
+                value="next month"
+                style="cursor: pointer"
+                onclick="setMonth()"
+                id="setMonth"
+                disabled
+              />
+              <input
+                class="button"
+                type="button"
+                value="custom"
+                style="cursor: pointer"
+                onclick="setFromCustom()"
+              />
+            </div>
+          </div>
+        </div>
+        <div>
+          <input
+            class="button"
+            type="button"
+            value="Export"
+            style="width: 100%"
+            onclick="readCsv()"
+          />
+        </div>
+        <div
+          style="display: flex; align-items: center; justify-content: center"
+        >
+          <div class="progressbarBG">
+            <div id="scsendbar" class="progressbar"></div>
+          </div>
+        </div>
+        <div
+          style="display: flex; align-items: center; justify-content: center"
+        >
+          <div class="progressbarBG">
+            <div id="getbar" class="progressbar"></div>
+          </div>
+        </div>
+        <div
+          style="display: flex; align-items: center; justify-content: center"
+        >
+          <div class="progressbarBG">
+            <div id="setbar" class="progressbar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <style>
+    .progressbar {
+      background-color: green;
+      width: 0%;
+      height: 30px;
+      border-radius: 5px;
+      margin: 0px;
+    }
+    .progressbarBG {
+      background-color: grey;
+      display: flex;
+      width: 100%;
+      height: 30px;
+      border-radius: 5px;
+    }
+    * {
+      font-family: sans-serif;
+      font-size: 20px;
+    }
+    .formDiv {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 500px;
+      width: 600px;
+      background-color: white;
+      border-radius: 50px;
+    }
+    body {
+      background-color: gainsboro;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .input {
+      width: 100%;
+    }
+    div {
+      margin: 10px;
+    }
+    .button {
+      cursor: pointer;
+      background-color: yellow;
+      border-radius: 15px;
+      min-width: 80px;
+      min-height: 40px;
+      border-color: white;
+      padding: 10px;
+    }
+    .button:active {
+      background-color: wheat;
+    }
+  </style>
+  <script>
+    function set30() {
+      $("#days").val(30);
+      resetDay();
+      $("#set301").css("background-color", "darkorange");
+    }
+    function set60() {
+      $("#days").val(60);
+      resetDay();
+      $("#set601").css("background-color", "darkorange");
+    }
+    function set90() {
+      $("#days").val(90);
+      resetDay();
+      $("#set901").css("background-color", "darkorange");
+    }
+    function set330() {
+      $("#days").val(330);
+      resetDay();
+      $("#set3301").css("background-color", "darkorange");
+    }
+    function setDayCustom() {
+      $("#days").css("display", "block");
+      resetDay();
+    }
+    function resetDay() {
+      $("#set301").css("background-color", "yellow");
+      $("#set601").css("background-color", "yellow");
+      $("#set901").css("background-color", "yellow");
+      $("#set3301").css("background-color", "yellow");
+    }
+    function setToday() {
+      var datepicker = $("#day");
+      // datepicker.datepicker();
+      datepicker.datepicker("setDate", new Date());
+    }
+    function setFromCustom() {
+      $("#day").css("display", "block");
+    }
+    var requests = [];
+    var isSet = false;
+    var errcount = 0;
+    var canSet = false;
+    var responsetotal = 0;
+    var sucResponse = 0;
+    var failedReq = 0;
+    var sucRes = 0;
+    var failedRes = 0;
+    total = 0;
+    var timeInterval = 100;
+    function readCsv() {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            var csvData = xhr.responseText;
+            // console.log("csvData: ", csvData);
+            var lines = csvData.split("\n");
+            total = lines.length;
+            for (var i = 0; i < lines.length; i++) {
+              // console.log("lines[i]: ", lines[i]);
+              var obj = {};
+              var currentLine = lines[i].split(",");
+              var link = currentLine[currentLine.length - 1];
+              var linksplit = link.split("/");
+              var locationCode = linksplit[linksplit.length - 1];
+              // console.log("link: ", link);
+              // console.log("locationCode: ", locationCode);
+              var req = {"code": locationCode, "link": link};
+              requests.push(req);
+              // submit(link, locationCode, i, lines.length);
+            }
+            // submitbulk(request);
+            countdown();
+            isSet = true;
+          } else {
+            console.log("Failed to load CSV file");
+          }
+        }
+      };
+      xhr.open("GET", "./location.csv", true);
+      xhr.send();
+    }
+    var suc = 0;
+    var responses = [];
+
+    var requests1 = [];
+    var responses1 = [];
+
+    function submitbulk() {
+      if (!isSet) return;
+      if (requests.length == 0) {
+        if (failedReq + suc > total - 10) {
+          canSet = true;
+          responsetotal = responses.length;
+          console.log("=====================GET END====================");
+          isSet = false;
+          errcount = 0;
+          timeInterval = 1000;
+          sendgooglesheet();
+          countdown1();
+        }
+        return;
+      }
+      var sendAmount = min(10, requests.length);
+      var request = requests.slice(0, sendAmount);
+      requests = requests.slice(sendAmount, requests.length);
+      var locationCode = request[0]["code"];
+      var link = request[0]["link"];
+      for(var i = 1; i < request.length; i ++){
+        locationCode = locationCode + '/' + request[i]["code"];
+        link = link + ',' + request[i]["link"];
+      }
+      var url = "https://creatuportada.em.uy/car/getsapi.php?day=" +
+                $("#day").val() +
+                "&days=" +
+                $("#days").val() +
+                "&add=" +
+                locationCode +
+                "&link=" +
+                link;
+      var xhttp1 = new XMLHttpRequest();
+      xhttp1.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          if (this.status == 200) {
+            // console.log(suc + "/" + total);
+            suc = suc + 1;
+            $("#getbar").css("width", (suc * 10 * 100) / total + "%");
+            responses.push(this.responseText);
+          } else {
+            errcount++;
+            if (errcount < 1000) {
+              requests.push(request);
+              console.log(errcount + "failed, re-trying...");
+            } else {
+              console.log(failedReq + "failed, ignoring...");
+              failedReq++;
+              requests1.push(request);
+            }
+          }
+        }
+      };
+      xhttp1.open("GET", url, true);
+      xhttp1.send();
+      $("#scsendbar").css("width", ((total - requests.length) * 100) / total + "%");
+    }
+    function reGet() {
+      if (!isSet) return;
+      if (requests1.length == 0) {
+        return;
+      }
+      var request = requests1[0];
+      requests1.shift();
+      var xhttp1 = new XMLHttpRequest();
+      xhttp1.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          if (this.status == 200) {
+            console.log("reGet")
+          } else {
+          }
+        }
+      };
+      xhttp1.open("GET", request, true);
+      xhttp1.send();
+    }
+
+    var delayTime = 0;
+    function countdown() {
+      var interval = setInterval(function () {
+        submitbulk();
+        // setdata();
+        delayTime ++;
+        if(delayTime > 10000) delayTime = 0;
+        if(delayTime % 100 == 0) {
+          reGet();
+          // reSet();
+        }
+      }, timeInterval);
+    }
+    function countdown1() {
+      var interval1 = setInterval(function () {
+        setdata();
+      }, 5000);
+    }
+
+    function sendgooglesheet() {
+      var xhttp3 = new XMLHttpRequest();
+      xhttp3.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          if (this.status == 200) {
+          } else {
+          }
+        }
+      };
+      apiInput = JSON.stringify(responses);
+      xhttp3.open(
+        "GET",
+        "https://creatuportada.em.uy/car/setallapi.php?response=" + apiInput,
+        true
+      );
+      xhttp3.send();
+    }
+
+    function setdata() {
+      if (!canSet) return;
+      if (responses.length == 0) {
+        if (failedRes + sucRes > responsetotal - 2) {
+          console.log("=====================SET END====================");
+          canSet = false;
+        }
+        return;
+      }
+      var response = responses[0];
+      responses.shift();
+      var xhttp1 = new XMLHttpRequest();
+      xhttp1.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          if (this.status == 200) {
+            sucRes = sucRes + 1;
+            console.log("set: " + sucRes + "/" + responsetotal);
+            $("#setbar").css("width", (sucRes * 100) / responsetotal + "%");
+          } else {
+            errcount++;
+            if (errcount < 1000) {
+              responses.push(response);
+              console.log("set: " + errcount + "failed, re-trying...");
+            } else {
+              failedRes++;
+              console.log("set: " + errcount + "failed, ignoring...");
+              responses1.push(response);
+            }
+          }
+        }
+      };
+      xhttp1.open(
+        "GET",
+        "https://creatuportada.em.uy/car/setapi.php?response=" + response,
+        true
+      );
+      xhttp1.send();
+    }
+    function reSet() {
+      if (!canSet) return;
+      if (responses1.length == 0) {
+        return;
+      }
+      var response = responses1[0];
+      responses1.shift();
+      var xhttp1 = new XMLHttpRequest();
+      xhttp1.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          if (this.status == 200) {
+          } else {
+          }
+        }
+      };
+      xhttp1.open(
+        "GET",
+        "https://creatuportada.em.uy/car/setapi.php?response=" + response,
+        true
+      );
+      xhttp1.send();
+    }
+    function min(a, b){
+      if(a > b) return b;
+      return a;
+    }
+  </script>
+</html>
