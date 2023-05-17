@@ -7,8 +7,14 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css"
+      href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css"
     />
+
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"
+    ></script>
   </head>
 
   <body>
@@ -168,44 +174,6 @@
       </div>
     </div>
   </body>
-  <script
-    type="text/javascript"
-    charset="utf8"
-    src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"
-  ></script>
-  <script
-    type="text/javascript"
-    charset="utf8"
-    src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"
-  ></script>
-  <script>
-    $(function () {
-      $("#table_id").dataTable({
-        aaData: [
-          ["Maths", "95", "A+", "null"],
-          ["English", "85", "A", "null"],
-          ["Science", "70", "A+", "2019-06-11 06:30:00"],
-          ["History", "80", "A", "null"],
-          ["Arts", "75", "B", "null"],
-          ["Economics", "70", "A+", "2019-11-09 06:30:00"],
-          ["Commerce", "80", "A", "null"],
-        ],
-        aoColumnDefs: [
-          {
-            sTitle: "Subject Name",
-            aTargets: ["subj_name"],
-          },
-          {
-            aTargets: [3],
-            sType: "date",
-            mRender: function (date, type, full) {
-              return full[1] == "70" ? new Date(date).toDateString() : "N/A";
-            },
-          },
-        ],
-      });
-    });
-  </script>
   <style>
     .flex div,
     p {
@@ -324,25 +292,17 @@
         if (xhr.readyState === XMLHttpRequest.DONE) {
           if (xhr.status === 200) {
             var csvData = xhr.responseText;
-            // console.log("csvData: ", csvData);
             var lines = csvData.split("\n");
             total = lines.length;
             for (var i = 0; i < lines.length; i++) {
-              // console.log("lines[i]: ", lines[i]);
               var obj = {};
               var currentLine = lines[i].split(",");
               var link = currentLine[currentLine.length - 1];
               var linksplit = link.split("/");
               var locationCode = linksplit[linksplit.length - 1];
-              // console.log("link: ", link);
-              // console.log("locationCode: ", locationCode);
               var req = { code: locationCode, link: link };
               requests.push(req);
-              // submit(link, locationCode, i, lines.length);
             }
-            // submitbulk(request);
-            countdown();
-            isSet = true;
           } else {
             console.log("Failed to load CSV file");
           }
@@ -350,216 +310,6 @@
       };
       xhr.open("GET", "./location.csv", true);
       xhr.send();
-    }
-    var suc = 0;
-    var responses = [];
-
-    var requests1 = [];
-    var responses1 = [];
-
-    function submitbulk() {
-      if (!isSet) return;
-      if (requests.length == 0) {
-        if (failedReq + suc > total - 10) {
-          canSet = true;
-          responsetotal = responses.length;
-          console.log("=====================GET END====================");
-          isSet = false;
-          errcount = 0;
-          timeInterval = 1000;
-          sendgooglesheet();
-          countdown1();
-        }
-        return;
-      }
-      var sendAmount = min(10, requests.length);
-      var request = requests.slice(0, sendAmount);
-      requests = requests.slice(sendAmount, requests.length);
-      var locationCode = request[0]["code"];
-      var link = request[0]["link"];
-      for (var i = 1; i < request.length; i++) {
-        locationCode = locationCode + "/" + request[i]["code"];
-        link = link + "," + request[i]["link"];
-      }
-      var url =
-        "https://creatuportada.em.uy/car/getsapi.php?day=" +
-        $("#day").val() +
-        "&days=" +
-        $("#days").val() +
-        "&add=" +
-        locationCode +
-        "&link=" +
-        link;
-      var xhttp1 = new XMLHttpRequest();
-      xhttp1.onreadystatechange = function () {
-        if (this.readyState == 4) {
-          if (this.status == 200) {
-            // console.log(suc + "/" + total);
-            suc = suc + 1;
-            $("#getbar").css("width", (suc * 10 * 100) / total + "%");
-            responses.push(this.responseText);
-            response = JSON.parse(this.responseText);
-            for (var i = 0; i < response.length; i++) {
-              // create table
-              var $table = $("#table");
-
-              //tbody
-              var $tbody = $table.append("<tbody />").children("tbody");
-
-              // add row
-              $tbody
-                .append("<tr />")
-                .children("tr:last")
-                .append(
-                  "<td>" + response[i]["LocationCode"].toUpperCase() + "</td>"
-                )
-                .append("<td>" + response[i]["State"] + "</td>")
-                .append("<td>" + response[i]["City"] + "</td>")
-                .append("<td>" + response[i]["Fulladdress"] + "</td>")
-                .append("<td>" + response[i]["Class"] + "</td>")
-                .append("<td>" + response[i]["Type"] + "</td>")
-                .append("<td>" + response[i]["PickDate"] + "</td>")
-                .append("<td>" + response[i]["DropDate"] + "</td>")
-                .append("<td>" + response[i]["payNowPrice"] + "</td>")
-                .append("<td>" + response[i]["payLaterPrice"] + "</td>")
-                .append("<td>" + response[i]["Link"] + "</td>");
-            }
-          } else {
-            errcount++;
-            if (errcount < 1000) {
-              requests.push(request);
-              console.log(errcount + "failed, re-trying...");
-            } else {
-              console.log(failedReq + "failed, ignoring...");
-              failedReq++;
-              requests1.push(request);
-            }
-          }
-        }
-      };
-      xhttp1.open("GET", url, true);
-      xhttp1.send();
-      $("#scsendbar").css(
-        "width",
-        ((total - requests.length) * 100) / total + "%"
-      );
-    }
-    function reGet() {
-      if (!isSet) return;
-      if (requests1.length == 0) {
-        return;
-      }
-      var request = requests1[0];
-      requests1.shift();
-      var xhttp1 = new XMLHttpRequest();
-      xhttp1.onreadystatechange = function () {
-        if (this.readyState == 4) {
-          if (this.status == 200) {
-            console.log("reGet");
-          } else {
-          }
-        }
-      };
-      xhttp1.open("GET", request, true);
-      xhttp1.send();
-    }
-
-    var delayTime = 0;
-    function countdown() {
-      var interval = setInterval(function () {
-        submitbulk();
-        // setdata();
-        delayTime++;
-        if (delayTime > 10000) delayTime = 0;
-        if (delayTime % 100 == 0) {
-          reGet();
-          // reSet();
-        }
-      }, timeInterval);
-    }
-    function countdown1() {
-      var interval1 = setInterval(function () {
-        setdata();
-      }, 5000);
-    }
-
-    function sendgooglesheet() {
-      var xhttp3 = new XMLHttpRequest();
-      xhttp3.onreadystatechange = function () {
-        if (this.readyState == 4) {
-          if (this.status == 200) {
-          } else {
-          }
-        }
-      };
-      apiInput = JSON.stringify(responses);
-      xhttp3.open(
-        "GET",
-        "https://creatuportada.em.uy/car/setallapi.php?response=" + apiInput,
-        true
-      );
-      xhttp3.send();
-    }
-
-    function setdata() {
-      if (!canSet) return;
-      if (responses.length == 0) {
-        if (failedRes + sucRes > responsetotal - 2) {
-          console.log("=====================SET END====================");
-          canSet = false;
-        }
-        return;
-      }
-      var response = responses[0];
-      responses.shift();
-      var xhttp1 = new XMLHttpRequest();
-      xhttp1.onreadystatechange = function () {
-        if (this.readyState == 4) {
-          if (this.status == 200) {
-            sucRes = sucRes + 1;
-            console.log("set: " + sucRes + "/" + responsetotal);
-            $("#setbar").css("width", (sucRes * 100) / responsetotal + "%");
-          } else {
-            errcount++;
-            if (errcount < 1000) {
-              responses.push(response);
-              console.log("set: " + errcount + "failed, re-trying...");
-            } else {
-              failedRes++;
-              console.log("set: " + errcount + "failed, ignoring...");
-              responses1.push(response);
-            }
-          }
-        }
-      };
-      xhttp1.open(
-        "GET",
-        "https://creatuportada.em.uy/car/setapi.php?response=" + response,
-        true
-      );
-      xhttp1.send();
-    }
-    function reSet() {
-      if (!canSet) return;
-      if (responses1.length == 0) {
-        return;
-      }
-      var response = responses1[0];
-      responses1.shift();
-      var xhttp1 = new XMLHttpRequest();
-      xhttp1.onreadystatechange = function () {
-        if (this.readyState == 4) {
-          if (this.status == 200) {
-          } else {
-          }
-        }
-      };
-      xhttp1.open(
-        "GET",
-        "https://creatuportada.em.uy/car/setapi.php?response=" + response,
-        true
-      );
-      xhttp1.send();
     }
     function min(a, b) {
       if (a > b) return b;

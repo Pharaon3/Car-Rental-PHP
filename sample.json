@@ -1,0 +1,41 @@
+{
+    {
+        "PickDate": "2023-05-20",
+        "DropDate": "2023-05-30",
+        "LocationCode": "ABC",
+        "State": "AL",
+        "City": "Anniston",
+        "Fulladdress": "blahblah",
+        "Class": "ABC",
+        "Type": "ABC",
+        "payNowPrice": "$123",
+        "payLaterPrice": "$234",
+        "Link": "https://www.avis.com/en/locations/us/al/anniston/anb"
+    },
+    {
+        "PickDate": "2023-05-20",
+        "DropDate": "2023-05-30",
+        "LocationCode": "ABC",
+        "State": "AL",
+        "City": "Anniston",
+        "Fulladdress": "blahblah",
+        "Class": "ABC",
+        "Type": "ABC",
+        "payNowPrice": "$123",
+        "payLaterPrice": "$234",
+        "Link": "https://www.avis.com/en/locations/us/al/anniston/anb"
+    },
+    {
+        "PickDate": "2023-05-20",
+        "DropDate": "2023-05-30",
+        "LocationCode": "ABC",
+        "State": "AL",
+        "City": "Anniston",
+        "Fulladdress": "blahblah",
+        "Class": "ABC",
+        "Type": "ABC",
+        "payNowPrice": "$123",
+        "payLaterPrice": "$234",
+        "Link": "https://www.avis.com/en/locations/us/al/anniston/anb"
+    },
+}
