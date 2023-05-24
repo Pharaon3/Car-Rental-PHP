@@ -1,15 +1,44 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>Car Rental Information</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css"
+    />
+
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"
+    ></script>
   </head>
 
   <body>
     <div class="formDiv">
       <div id="myForm">
-        <div>
+        <div class="flex" style="display: block">
+          <input
+            class="input"
+            type="text"
+            name="cookie"
+            id="cookie"
+            placeholder="cookie"
+          />
+        </div>
+        <div class="flex" style="display: block">
+          <input
+            class="input"
+            type="text"
+            name="token"
+            id="token"
+            placeholder="token"
+          />
+        </div>
+        <div class="flex">
           <p>How many day would you like to rent for?</p>
           <div>
             <input
@@ -62,7 +91,7 @@
             </div>
           </div>
         </div>
-        <div>
+        <div class="flex">
           <p>Start from?</p>
           <div>
             <input
@@ -72,6 +101,8 @@
               id="day"
               style="display: none"
             />
+          </div>
+          <div>
             <div>
               <input
                 class="button"
@@ -110,14 +141,44 @@
             </div>
           </div>
         </div>
-        <div>
+        <div class="flexdiv">
+          <input
+            class="button"
+            type="button"
+            value="Scan"
+            style="width: 100%"
+            onclick="readCsv()"
+          />
+          <input
+            class="button"
+            type="button"
+            value="Display"
+            style="width: 100%"
+            onclick="toDatatable()"
+          />
+        </div>
+        <div class="flexdiv">
+          <input
+            class="button"
+            type="button"
+            value="Store"
+            style="width: 100%"
+            onclick="store()"
+          />
           <input
             class="button"
             type="button"
             value="Export"
             style="width: 100%"
-            onclick="readCsv()"
+            onclick="Export()"
           />
+        </div>
+        <div
+          style="display: flex; align-items: center; justify-content: center"
+        >
+          <div class="progressbarBG">
+            <div id="scsendbar" class="progressbar"></div>
+          </div>
         </div>
         <div
           style="display: flex; align-items: center; justify-content: center"
@@ -127,16 +188,58 @@
           </div>
         </div>
         <div
-          style="display: flex; align-items: center; justify-content: center"
+          style="display: none; align-items: center; justify-content: center"
         >
           <div class="progressbarBG">
             <div id="setbar" class="progressbar"></div>
           </div>
         </div>
+        <div
+          style="align-items: center; justify-content: center"
+        >
+          <div class="">
+            <div id="date" class=""></div>
+          </div>
+        </div>
+        <div style="width: 100%">
+          <table id="table_id">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>State</th>
+                <th>City</th>
+                <th>Fulladdress</th>
+                <th>Class</th>
+                <th>Type</th>
+                <!-- <th>PickDate</th>
+                <th>DropDate</th> -->
+                <th>payNow</th>
+                <th>payLater</th>
+                <th>Link</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </body>
   <style>
+    .flexdiv {
+      display: flex;
+      justify-content: center;
+    }
+    .flex div,
+    p {
+      display: flex;
+      justify-content: center;
+    }
+    table,
+    th,
+    td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
     .progressbar {
       background-color: green;
       width: 0%;
@@ -153,14 +256,12 @@
     }
     * {
       font-family: sans-serif;
-      font-size: 20px;
+      /* font-size: 20px; */
     }
     .formDiv {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 500px;
-      width: 600px;
       background-color: white;
       border-radius: 50px;
     }
@@ -238,38 +339,36 @@
     var sucRes = 0;
     var failedRes = 0;
     total = 0;
-    var timeInterval = 100;
+    var datatable;
+    var timeInterval = 1000;
+    var mcookie, token;
+
     function readCsv() {
+      // mcookie = $("#cookie").val();
+      // token = $("#token").val();
+      mcookie =
+        'datacenter=cdal; visitorId=cdal-A9a469f58-d16b-4f7d-8d62-00785fb7214a; APISID=c089cc80-acef-4d3a-95cc-ba7bd2660b92; digital-token=cde335a3-f389-4201-84b1-614f63c82e12-01-cdal-ho4153; region=euwest1; SessionPersistence=PROFILEDATA%3A%3DauthorizableId%253Danonymous; akaalb_production_config=~op=avis_euwest1_webapi_private_lbid:avis-webapi-euwest1-aws|avis_com:avis-us-dal|~rv=82~m=avis-webapi-euwest1-aws:0|avis-us-dal:0|~os=7f956ca2417c5e686d715889b6a30f65~id=1a6a1565e54fa1139054b19956f33672; optimizelyEndUserId=oeu1684029980054r0.0640200876603052; _gcl_au=1.1.766055992.1684029984; _gid=GA1.2.1399017667.1684029986; pxcts=eb958dd9-f1fb-11ed-8e44-78467a787353; _pxvid=eb9581b2-f1fb-11ed-8e44-78467a787353; _pxhd=6d0d74f748fdcbb1afcf18295472be69a8701ca6c52168b46455f9a193a76a9b:eb9581b2-f1fb-11ed-8e44-78467a787353; __qca=P0-575998114-1684029989446; __idcontext=eyJjb29raWVJRCI6IjJQbFM2ZlVrNEY2NDZCVjdoZkc3bk5PQWc1VCIsImRldmljZUlEIjoiMlBsUzZZeTluWTNrRno3eDUzbk1TMzROUVdHIiwiaXYiOiIiLCJ2IjoiIn0%3D; _fbp=fb.1.1684030006637.199116794; _clck=124o858|2|fbl|0|1229; QuantumMetricUserID=1780fd6513e828045acca889649218c3; bounceClientVisit2252v=N4IgNgDiBcIBYBcEQM4FIDMBBNAmAYnvgO6kB0AhgG4CWKZAxgPYC2RApgHZFyvsgAaEACcYIUsUq16zFoJB0A+gHMmilOxQoaTTjABmFMBqFLlEdZu26DRjQF8gA; QuantumMetricSessionID=506ccc79741bbc71fa8b223f9ee3f8bb; _clsk=38ocd1|1684068032429|9|1|p.clarity.ms/collect; _px2=eyJ1IjoiYjRiZTU2MTAtZjI1OC0xMWVkLWI1MTktMmJiNDZjYmRlYzczIiwidiI6ImViOTU4MWIyLWYxZmItMTFlZC04ZTQ0LTc4NDY3YTc4NzM1MyIsInQiOjE2ODQwNzE1Nzc1NzgsImgiOiIwYjZkNzY0ODBiY2Q1MDhhZTQ0Y2RiMTQ2OWE4MzdkYWU3N2UyMTQzZjhjOGU1MWEyZGM3NjVkMmM2MWI4ZDRmIn0=; _gat_UA-6997633-3=1; _uetsid=ee327660f1fb11edbeda6910b82720c4; _uetvid=ee327020f1fb11edadf7a3ce4c421955; _ga_8L27T28KZS=GS1.1.1684063706.4.1.1684071429.54.0.0; RT="z=1&dm=avis.com&si=5d548c96-2f57-4487-bdd2-61b69c9bddd7&ss=lhnc1mtp&sl=r&tt=4s4y&bcn=%2F%2F173bf109.akstat.io%2F&obo=1&nu=43hl6rgh&cl=4loop"; _ga=GA1.2.458135.1684029984';
+      token =
+        "eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiZGlyIn0..Inu-bA9KrzfjNVtI._IjCW5SUoyHsC9gwnJqFdeIVAIiJ9ZjhUyh9hdvjgRsQcNRTDh201QK9LQBb2LRNiNwQHeaZyyZAKHpG2ISMxupGaBBP0o4YF8L4vnQ4V61ex6GEhGdkVYq9JUAOVVEOH6_tGvTB98fEo1Je1XVzHtVv2-Gf3RQ_uBCmYttkKXvu3FWOeYP7Aj1T2FXXb68YPAdgQ6qazQ0BF76QAjXL3uiMihcmHXw9dSF07wKk6qTpYM1H0gEIP0xOZib4jtyBHWU0lmRsTRw9HR01NXcnVH5i2NLmseiu9a0SWqvjgAq2FBxdyQf6UZWuQJMAQLW4dfWPnDf_K04V1Vc01RURzna-Kts5ubwI0vuYt4_IU7Ow-DjRIdcWtYl6RYuixjBSonU-YTFqFQNqf7vPvVnNPRljuOpeP49SYsRfETiGEc9NDJMZ88erFI4Ncn2cpXXR-19c5Mym3gFBgIXDc4XIoqypEeNhq8vz9HHjnkerVa_hns0sdwEKk5Mk3n6V3vTusHytz7D6M3XOvXRWMJ4zxJJtwyQdoVPyhwaHIwQJz_hyC08fqpJZ-gzOhcxy4Oq2o8l8ym8gfN_pNgZrM5LLbzO_8zDnu36LoTlY8Y_68p8f6vWBYgqT888jtRfSma9Corxb7xU97xxNq9L9hljAby31d-GbHF06h4kkrlMIno1-gaS2n0Txh9hlWnglG9yozlgV629jsrtK0TmuHGDDYjpv1bNmOTxDLfDjp6_vSkGW2MVGC-Ts84QxGSlrypcLVtxyRG5Otw0xbytpbED7cY4BvttiG6ozyz_eMPqUXxRzcAkkHT7SYI1gmnqDWcgKZFzn2y40iNDYyi_QrwU33q-D5pufMmdoavweB2lZtlLt1x2c-60f6PVStiJO4NJ16GAyJT914Az61X7jYtFWHFyEpr-u73jYBjHLG1xYm9OsyBoPREXLueifr7JgzObINtTMcnEnPXzalxZjWX8PRZPgs1NPxbUK9FjgjwxOQZu2IYvllJHe3v8nVBotUkXjcSyaE0nl9Qm-CvJi1Lp8XQA8Puagm3xcf0_dE3NYIqmm3m3cmVd80nM7PWfM7mEO7fR7M9GEZOWghm707T0QREDuW16xesgI1qlXfYGd_o6fakiu5Nh1YsDMpuPHf0DV3KP4yK_3OEOrFifr0S7TlkIZ3FJVc59siFEi3HRSw5fILQ228P-5F-0yLJ3eg0O3c1iJuVw3BuX7_mkYpfKsmqIb0AYI4MccSRH-uRosS1cCKd_aKkVzrDO4un1SzTUotpPhcmhopCMKXOnEN2Qfe4k2NhnM8yOociyly24aVai--OwPIU3pANczJUcanj98vHzlvGiMqYwbD-cDTAIq19UalP6uc0nVKi927EXnDVDAOg5ovx7uwBxUnerOS7xUaqc-5F3eamwP4wGJ0p5s-S5j9ps.mCF130BeKO8WYIlczq7jrw";
+      datatable = $("#table_id").dataTable({
+        aaData: dataTableList,
+      });
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
           if (xhr.status === 200) {
             var csvData = xhr.responseText;
-            // console.log("csvData: ", csvData);
             var lines = csvData.split("\n");
             total = lines.length;
             for (var i = 0; i < lines.length; i++) {
-              // console.log("lines[i]: ", lines[i]);
               var obj = {};
               var currentLine = lines[i].split(",");
               var link = currentLine[currentLine.length - 1];
               var linksplit = link.split("/");
               var locationCode = linksplit[linksplit.length - 1];
-              // console.log("link: ", link);
-              // console.log("locationCode: ", locationCode);
-              var url =
-                "https://creatuportada.em.uy/car/getapi.php?day=" +
-                $("#day").val() +
-                "&days=" +
-                $("#days").val() +
-                "&add=" +
-                locationCode +
-                "&link=" +
-                link;
-              requests.push(url);
-              // submit(link, locationCode, i, lines.length);
+              var req = { code: locationCode, link: link };
+              requests.push(req);
             }
-            // submitbulk(request);
             countdown();
             isSet = true;
           } else {
@@ -286,6 +385,8 @@
     var requests1 = [];
     var responses1 = [];
 
+    var dataTableList = [];
+    var csvList = [];
     function submitbulk() {
       if (!isSet) return;
       if (requests.length == 0) {
@@ -295,154 +396,207 @@
           console.log("=====================GET END====================");
           isSet = false;
           errcount = 0;
-          timeInterval = 1000;
-          sendgooglesheet();
-          countdown1();
         }
         return;
       }
-      var request = requests[0];
-      requests.shift();
-      var xhttp1 = new XMLHttpRequest();
-      xhttp1.onreadystatechange = function () {
-        if (this.readyState == 4) {
-          if (this.status == 200) {
-            // console.log(suc + "/" + total);
-            suc = suc + 1;
-            $("#getbar").css("width", (suc * 100) / total + "%");
-            responses.push(this.responseText);
-          } else {
-            errcount++;
-            if (errcount < 1000) {
-              requests.push(request);
-              console.log(errcount + "failed, re-trying...");
-            } else {
-              console.log(failedReq + "failed, ignoring...");
-              failedReq++;
-              requests1.push(request);
+      var sendAmount = min(10, requests.length);
+      var request = requests.slice(0, sendAmount);
+      requests = requests.slice(sendAmount, requests.length);
+
+      var locationCode = request[0]["code"].toString().replace(/\r/g, "");
+      var link = request[0]["link"];
+      for (var i = 1; i < request.length; i++) {
+        locationCode = locationCode + "/" + request[i]["code"].toString().replace(/\r/g, "");
+        link = link + "," + request[i]["link"].replace(/\r/g, "");
+      }
+
+      // var xhr1 = new XMLHttpRequest();
+      // xhr1.withCredentials = true;
+
+      // xhr1.addEventListener("readystatechange", function () {
+      //   if (this.readyState === 4) {
+      //     suc = suc + 1;
+      //     $("#getbar").css("width", (suc * 10 * 100) / total + "%");
+      //     res = this.responseText;
+      //     var resString = res.substring(
+      //       res.indexOf("["),
+      //       res.lastIndexOf("]") + 1
+      //     );
+      //     responses.push(JSON.parse(resString));
+      //     response = JSON.parse(resString);
+      //     // console.log(response)
+      //     // var newdataTableList = [];
+      //     for (var i = 0; i < response.length; i++) {
+      //       if (
+      //         response[i]["payNowPrice"].length > 1 &&
+      //         response[i]["payLaterPrice"].length > 1
+      //       ) {
+      //         dataTableList.push([
+      //           response[i]["LocationCode"].toUpperCase(),
+      //           response[i]["State"],
+      //           response[i]["City"],
+      //           response[i]["Fulladdress"],
+      //           response[i]["Class"],
+      //           response[i]["Type"],
+      //           // response[i]["PickDate"],
+      //           // response[i]["DropDate"],
+      //           response[i]["payNowPrice"],
+      //           response[i]["payLaterPrice"],
+      //           "<a href='" + response[i]["Link"] + "' > " + response[i]["Link"].replace('https://www.avis.com/en/locations/us/', '') + " </a>",
+      //         ]);
+      //         csvList.push([
+      //           response[i]["LocationCode"].toUpperCase(),
+      //           response[i]["State"],
+      //           response[i]["City"],
+      //           response[i]["Fulladdress"],
+      //           response[i]["Class"],
+      //           response[i]["Type"],
+      //           response[i]["PickDate"],
+      //           response[i]["DropDate"],
+      //           response[i]["payNowPrice"],
+      //           response[i]["payLaterPrice"],
+      //           response[i]["Link"],
+      //         ]);
+      //         $("#date").text(response[i]["PickDate"] + ' , ' + response[i]["DropDate"]);
+      //       }
+      //     }
+      //     // datatable.fnClearTable();
+      //     // datatable.fnAddData(dataTableList); // Add new data
+      //     // datatable.fnAdjustColumnSizing();
+      //   }
+      // });
+
+      // xhr1.open(
+      //   "GET",
+      //   "https://creatuportada.em.uy/car/getsapi.php" +
+      //     locationCode +
+      //     "&link=" +
+      //     link +
+      //     "&day=" +
+      //     $("#day").val() +
+      //     "&days=" +
+      //     $("#days").val()
+      // );
+
+      // xhr1.send();
+
+      // WARNING: For POST requests, body is set to null by browsers.
+      var data3 = new FormData();
+      // data3.append("request", JSON.stringify(request));
+      data3.append("add", locationCode);
+      data3.append("link", link);
+      data3.append("day", $("#day").val());
+      data3.append("days", $("#days").val());
+      data3.append("cookie", $("#cookie").val());
+      data3.append("token", $("#token").val());
+
+      var xhr3 = new XMLHttpRequest();
+      xhr3.withCredentials = true;
+
+      xhr3.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+          suc = suc + 1;
+          $("#getbar").css("width", (suc * 10 * 100) / total + "%");
+          res = this.responseText;
+          var resString = res.substring(
+            res.indexOf("["),
+            res.lastIndexOf("]") + 1
+          );
+          responses.push(JSON.parse(resString));
+          response = JSON.parse(resString);
+          // console.log(response)
+          // var newdataTableList = [];
+          for (var i = 0; i < response.length; i++) {
+            if (
+              response[i]["payNowPrice"].length > 1 &&
+              response[i]["payLaterPrice"].length > 1
+            ) {
+              dataTableList.push([
+                response[i]["LocationCode"].toUpperCase(),
+                response[i]["State"],
+                response[i]["City"],
+                response[i]["Fulladdress"],
+                response[i]["Class"],
+                response[i]["Type"],
+                // response[i]["PickDate"],
+                // response[i]["DropDate"],
+                response[i]["payNowPrice"],
+                response[i]["payLaterPrice"],
+                "<a href='" + response[i]["Link"] + "' > " + response[i]["Link"].replace('https://www.avis.com/en/locations/us/', '') + " </a>",
+              ]);
+              csvList.push([
+                response[i]["LocationCode"].toUpperCase(),
+                response[i]["State"],
+                response[i]["City"],
+                response[i]["Fulladdress"],
+                response[i]["Class"],
+                response[i]["Type"],
+                response[i]["PickDate"],
+                response[i]["DropDate"],
+                response[i]["payNowPrice"],
+                response[i]["payLaterPrice"],
+                response[i]["Link"],
+              ]);
+              $("#date").text(response[i]["PickDate"] + ' , ' + response[i]["DropDate"]);
             }
           }
+          // datatable.fnClearTable();
+          // datatable.fnAddData(dataTableList); // Add new data
+          // datatable.fnAdjustColumnSizing();
         }
-      };
-      xhttp1.open("GET", request, true);
-      xhttp1.send();
-    }
-    function reGet() {
-      if (!isSet) return;
-      if (requests1.length == 0) {
-        return;
-      }
-      var request = requests1[0];
-      requests1.shift();
-      var xhttp1 = new XMLHttpRequest();
-      xhttp1.onreadystatechange = function () {
-        if (this.readyState == 4) {
-          if (this.status == 200) {
-            console.log("reGet")
-          } else {
-          }
-        }
-      };
-      xhttp1.open("GET", request, true);
-      xhttp1.send();
+      });
+
+      xhr3.open("POST", "https://creatuportada.em.uy/car/getsapi.php");
+      // console.log("data3", data3);
+      xhr3.send(data3);
+
+
+
+      $("#scsendbar").css(
+        "width",
+        ((total - requests.length) * 100) / total + "%"
+      );
     }
 
     var delayTime = 0;
+
     function countdown() {
       var interval = setInterval(function () {
         submitbulk();
-        // setdata();
-        delayTime ++;
-        if(delayTime > 10000) delayTime = 0;
-        if(delayTime % 100 == 0) {
-          reGet();
-          // reSet();
-        }
       }, timeInterval);
     }
+
     function countdown1() {
       var interval1 = setInterval(function () {
-        setdata();
+        // setdata();
       }, 5000);
     }
 
-    function sendgooglesheet() {
-      var xhttp3 = new XMLHttpRequest();
-      xhttp3.onreadystatechange = function () {
-        if (this.readyState == 4) {
-          if (this.status == 200) {
-          } else {
-          }
-        }
-      };
-      apiInput = JSON.stringify(responses);
-      xhttp3.open(
-        "GET",
-        "https://creatuportada.em.uy/car/setallapi.php?response=" + apiInput,
-        true
-      );
-      xhttp3.send();
+    function min(a, b) {
+      if (a > b) return b;
+      return a;
     }
 
-    function setdata() {
-      if (!canSet) return;
-      if (responses.length == 0) {
-        if (failedRes + sucRes > responsetotal - 2) {
-          console.log("=====================SET END====================");
-          canSet = false;
-        }
-        return;
-      }
-      var response = responses[0];
-      responses.shift();
-      var xhttp1 = new XMLHttpRequest();
-      xhttp1.onreadystatechange = function () {
-        if (this.readyState == 4) {
-          if (this.status == 200) {
-            sucRes = sucRes + 1;
-            console.log("set: " + sucRes + "/" + responsetotal);
-            $("#setbar").css("width", (sucRes * 100) / responsetotal + "%");
-          } else {
-            errcount++;
-            if (errcount < 1000) {
-              responses.push(response);
-              console.log("set: " + errcount + "failed, re-trying...");
-            } else {
-              failedRes++;
-              console.log("set: " + errcount + "failed, ignoring...");
-              responses1.push(response);
-            }
-          }
-        }
-      };
-      xhttp1.open(
-        "GET",
-        "https://creatuportada.em.uy/car/setapi.php?response=" + response,
-        true
-      );
-      xhttp1.send();
+    function toDatatable() {
+      datatable.fnClearTable();
+      if(dataTableList.length > 1) datatable.fnAddData(dataTableList); // Add new data
     }
-    function reSet() {
-      if (!canSet) return;
-      if (responses1.length == 0) {
-        return;
-      }
-      var response = responses1[0];
-      responses1.shift();
-      var xhttp1 = new XMLHttpRequest();
-      xhttp1.onreadystatechange = function () {
-        if (this.readyState == 4) {
-          if (this.status == 200) {
-          } else {
-          }
-        }
-      };
-      xhttp1.open(
-        "GET",
-        "https://creatuportada.em.uy/car/setapi.php?response=" + response,
-        true
-      );
-      xhttp1.send();
+    function Store() {
+      localStorage.setItem("carRental", dataTableList);
+    }
+    function Export() {
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvList.forEach(function(rowArray) {
+          let row = rowArray.join(",");
+          csvContent += row + "\r\n";
+      });
+      var encodedUri = encodeURI(csvContent);
+      var link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "car_rental.csv");
+      document.body.appendChild(link); // Required for FF
+
+      link.click(); // This will download the data file named "my_data.csv".
     }
   </script>
 </html>
