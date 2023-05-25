@@ -330,6 +330,7 @@
       $("#day").css("display", "block");
     }
     var requests = [];
+    var requests1 = [];
     var isSet = false;
     var errcount = 0;
     var canSet = false;
@@ -342,8 +343,10 @@
     var datatable;
     var timeInterval = 1000;
     var mcookie, token;
+    var setPickDate;
 
     function readCsv() {
+      setPickDate = $("#day").val();
       // mcookie = $("#cookie").val();
       // token = $("#token").val();
       mcookie =
@@ -368,6 +371,7 @@
               var locationCode = linksplit[linksplit.length - 1];
               var req = { code: locationCode, link: link };
               requests.push(req);
+              requests1.push(req);
             }
             countdown();
             isSet = true;
@@ -387,16 +391,28 @@
 
     var dataTableList = [];
     var csvList = [];
+    function getNextDate(date) {
+      // Create a new Date object with the given date
+      var current = new Date(date);
+
+      // Increment the date by 1 day
+      current.setDate(current.getDate() + 1);
+
+      // Return the next date
+      return current;
+    }
     function submitbulk() {
       if (!isSet) return;
       if (requests.length == 0) {
-        if (failedReq + suc > total - 10) {
-          canSet = true;
-          responsetotal = responses.length;
-          console.log("=====================GET END====================");
-          isSet = false;
-          errcount = 0;
-        }
+        setPickDate = getNextDate(setPickDate);
+        requests = requests1;
+        // if (failedReq + suc > total - 10) {
+        //   canSet = true;
+        //   responsetotal = responses.length;
+        //   console.log("=====================GET END====================");
+        //   isSet = false;
+        //   errcount = 0;
+        // }
         return;
       }
       var sendAmount = min(10, requests.length);
@@ -410,82 +426,11 @@
         link = link + "," + request[i]["link"].replace(/\r/g, "");
       }
 
-      // var xhr1 = new XMLHttpRequest();
-      // xhr1.withCredentials = true;
-
-      // xhr1.addEventListener("readystatechange", function () {
-      //   if (this.readyState === 4) {
-      //     suc = suc + 1;
-      //     $("#getbar").css("width", (suc * 10 * 100) / total + "%");
-      //     res = this.responseText;
-      //     var resString = res.substring(
-      //       res.indexOf("["),
-      //       res.lastIndexOf("]") + 1
-      //     );
-      //     responses.push(JSON.parse(resString));
-      //     response = JSON.parse(resString);
-      //     // console.log(response)
-      //     // var newdataTableList = [];
-      //     for (var i = 0; i < response.length; i++) {
-      //       if (
-      //         response[i]["payNowPrice"].length > 1 &&
-      //         response[i]["payLaterPrice"].length > 1
-      //       ) {
-      //         dataTableList.push([
-      //           response[i]["LocationCode"].toUpperCase(),
-      //           response[i]["State"],
-      //           response[i]["City"],
-      //           response[i]["Fulladdress"],
-      //           response[i]["Class"],
-      //           response[i]["Type"],
-      //           // response[i]["PickDate"],
-      //           // response[i]["DropDate"],
-      //           response[i]["payNowPrice"],
-      //           response[i]["payLaterPrice"],
-      //           "<a href='" + response[i]["Link"] + "' > " + response[i]["Link"].replace('https://www.avis.com/en/locations/us/', '') + " </a>",
-      //         ]);
-      //         csvList.push([
-      //           response[i]["LocationCode"].toUpperCase(),
-      //           response[i]["State"],
-      //           response[i]["City"],
-      //           response[i]["Fulladdress"],
-      //           response[i]["Class"],
-      //           response[i]["Type"],
-      //           response[i]["PickDate"],
-      //           response[i]["DropDate"],
-      //           response[i]["payNowPrice"],
-      //           response[i]["payLaterPrice"],
-      //           response[i]["Link"],
-      //         ]);
-      //         $("#date").text(response[i]["PickDate"] + ' , ' + response[i]["DropDate"]);
-      //       }
-      //     }
-      //     // datatable.fnClearTable();
-      //     // datatable.fnAddData(dataTableList); // Add new data
-      //     // datatable.fnAdjustColumnSizing();
-      //   }
-      // });
-
-      // xhr1.open(
-      //   "GET",
-      //   "https://creatuportada.em.uy/car/getsapi.php" +
-      //     locationCode +
-      //     "&link=" +
-      //     link +
-      //     "&day=" +
-      //     $("#day").val() +
-      //     "&days=" +
-      //     $("#days").val()
-      // );
-
-      // xhr1.send();
-
-      // WARNING: For POST requests, body is set to null by browsers.
       var data3 = new FormData();
       // data3.append("request", JSON.stringify(request));
       data3.append("add", locationCode);
       data3.append("link", link);
-      data3.append("day", $("#day").val());
+      data3.append("day", setPickDate);
       data3.append("days", $("#days").val());
       data3.append("cookie", $("#cookie").val());
       data3.append("token", $("#token").val());
@@ -498,6 +443,9 @@
           suc = suc + 1;
           $("#getbar").css("width", (suc * 10 * 100) / total + "%");
           res = this.responseText;
+          if (suc >= total) {
+            suc = 0;
+          }
           var resString = res.substring(
             res.indexOf("["),
             res.lastIndexOf("]") + 1
@@ -593,7 +541,7 @@
       var encodedUri = encodeURI(csvContent);
       var link = document.createElement("a");
       link.setAttribute("href", encodedUri);
-      link.setAttribute("download", "car_rental.csv");
+      link.setAttribute("download", "car_rental" + $("#day").val() + ".csv");
       document.body.appendChild(link); // Required for FF
 
       link.click(); // This will download the data file named "my_data.csv".
