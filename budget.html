@@ -404,6 +404,7 @@
     function submitbulk() {
       if (!isSet) return;
       if (requests.length == 0) {
+        return;
         setPickDate = getNextDate(setPickDate);
         requests = requests1;
         // if (failedReq + suc > total - 10) {
@@ -432,8 +433,8 @@
       data3.append("link", link);
       data3.append("day", setPickDate);
       data3.append("days", $("#days").val());
-      data3.append("cookie", $("#cookie").val());
-      data3.append("token", $("#token").val());
+      data3.append("cookie", $("#cookie").val());   //HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+      data3.append("token", $("#token").val());     //HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
 
       var xhr3 = new XMLHttpRequest();
       xhr3.withCredentials = true;
