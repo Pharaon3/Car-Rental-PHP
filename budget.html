@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Car Rental Information</title>
+    <title>Car Rental Information (budget) </title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <link
       rel="stylesheet"
@@ -20,7 +20,7 @@
   <body>
     <div class="formDiv">
       <div id="myForm">
-        <div class="flex" style="display: none">
+        <div class="flex" style="display: block">
           <input
             class="input"
             type="text"
@@ -29,7 +29,7 @@
             placeholder="cookie"
           />
         </div>
-        <div class="flex" style="display: none">
+        <div class="flex" style="display: block">
           <input
             class="input"
             type="text"
@@ -330,6 +330,7 @@
       $("#day").css("display", "block");
     }
     var requests = [];
+    var requests1 = [];
     var isSet = false;
     var errcount = 0;
     var canSet = false;
@@ -342,8 +343,10 @@
     var datatable;
     var timeInterval = 1000;
     var mcookie, token;
+    var setPickDate;
 
     function readCsv() {
+      setPickDate = $("#day").val();
       // mcookie = $("#cookie").val();
       // token = $("#token").val();
       mcookie =
@@ -368,6 +371,7 @@
               var locationCode = linksplit[linksplit.length - 1];
               var req = { code: locationCode, link: link };
               requests.push(req);
+              requests1.push(req);
             }
             countdown();
             isSet = true;
@@ -387,36 +391,61 @@
 
     var dataTableList = [];
     var csvList = [];
+    function getNextDate(date) {
+      // Create a new Date object with the given date
+      var current = new Date(date);
+
+      // Increment the date by 1 day
+      current.setDate(current.getDate() + 1);
+
+      // Return the next date
+      return current;
+    }
     function submitbulk() {
       if (!isSet) return;
       if (requests.length == 0) {
-        if (failedReq + suc > total - 10) {
-          canSet = true;
-          responsetotal = responses.length;
-          console.log("=====================GET END====================");
-          isSet = false;
-          errcount = 0;
-        }
+        setPickDate = getNextDate(setPickDate);
+        requests = requests1;
+        // if (failedReq + suc > total - 10) {
+        //   canSet = true;
+        //   responsetotal = responses.length;
+        //   console.log("=====================GET END====================");
+        //   isSet = false;
+        //   errcount = 0;
+        // }
         return;
       }
       var sendAmount = min(10, requests.length);
       var request = requests.slice(0, sendAmount);
       requests = requests.slice(sendAmount, requests.length);
-      var locationCode = request[0]["code"];
+
+      var locationCode = request[0]["code"].toString().replace(/\r/g, "");
       var link = request[0]["link"];
       for (var i = 1; i < request.length; i++) {
-        locationCode = locationCode + "/" + request[i]["code"];
-        link = link + "," + request[i]["link"];
+        locationCode = locationCode + "/" + request[i]["code"].toString().replace(/\r/g, "");
+        link = link + "," + request[i]["link"].replace(/\r/g, "");
       }
 
-      var xhr1 = new XMLHttpRequest();
-      xhr1.withCredentials = true;
+      var data3 = new FormData();
+      // data3.append("request", JSON.stringify(request));
+      data3.append("add", locationCode);
+      data3.append("link", link);
+      data3.append("day", setPickDate);
+      data3.append("days", $("#days").val());
+      data3.append("cookie", $("#cookie").val());
+      data3.append("token", $("#token").val());
 
-      xhr1.addEventListener("readystatechange", function () {
-        if (this.readyState === 4) {
+      var xhr3 = new XMLHttpRequest();
+      xhr3.withCredentials = true;
+
+      xhr3.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
           suc = suc + 1;
           $("#getbar").css("width", (suc * 10 * 100) / total + "%");
           res = this.responseText;
+          if (suc >= total) {
+            suc = 0;
+          }
           var resString = res.substring(
             res.indexOf("["),
             res.lastIndexOf("]") + 1
@@ -441,7 +470,7 @@
                 // response[i]["DropDate"],
                 response[i]["payNowPrice"],
                 response[i]["payLaterPrice"],
-                "<a href='" + response[i]["Link"] + "' > " + response[i]["Link"].replace('https://www.avis.com/en/locations/us/', '') + " </a>" ,
+                "<a href='" + response[i]["Link"] + "' > " + response[i]["Link"].replace('https://www.avis.com/en/locations/us/', '') + " </a>",
               ]);
               csvList.push([
                 response[i]["LocationCode"].toUpperCase(),
@@ -465,19 +494,11 @@
         }
       });
 
-      xhr1.open(
-        "GET",
-        "https://creatuportada.em.uy/car/getsapiget.php?add=" +
-          locationCode +
-          "&link=" +
-          link +
-          "&day=" +
-          $("#day").val() +
-          "&days=" +
-          $("#days").val()
-      );
+      xhr3.open("POST", "https://creatuportada.em.uy/car/getsapibudget.php");
+      // console.log("data3", data3);
+      xhr3.send(data3);
 
-      xhr1.send();
+
 
       $("#scsendbar").css(
         "width",
@@ -520,7 +541,7 @@
       var encodedUri = encodeURI(csvContent);
       var link = document.createElement("a");
       link.setAttribute("href", encodedUri);
-      link.setAttribute("download", "car_rental.csv");
+      link.setAttribute("download", "car_rental_budget" + $("#day").val() + ".csv");
       document.body.appendChild(link); // Required for FF
 
       link.click(); // This will download the data file named "my_data.csv".
