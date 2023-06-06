@@ -457,8 +457,8 @@
           // var newdataTableList = [];
           for (var i = 0; i < response.length; i++) {
             if (
-              response[i]["payNowPrice"].length > 1 &&
-              response[i]["payLaterPrice"].length > 1
+              response[i]["payNowPrice"] !="-" ||
+              response[i]["payLaterPrice"] != "-"
             ) {
               dataTableList.push([
                 response[i]["LocationCode"].toUpperCase(),

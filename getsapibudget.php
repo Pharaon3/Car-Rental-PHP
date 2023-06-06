@@ -40,40 +40,52 @@ for ($c = 0; $c < count($adds); $c ++){
     // echo $digitoken;
     // echo $mycookie;
 
-    $curl = curl_init();
+$curl = curl_init();
 
-    curl_setopt_array($curl, array(
-    CURLOPT_URL => 'https://www.budget.com/webapi/reservation/vehicles',
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => '',
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 0,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => 'POST',
-    CURLOPT_POSTFIELDS =>'{"rqHeader":{"brand":"","locale":"en_US"},"nonUSShop":true,
-    "pickInfo":"' . $add . '","pickDate":"' . $date . '",
-    "pickTime":"12:00 PM","dropInfo":"' . $add . '","dropDate":"' . $dropDate . '",
-    "dropTime":"12:00 PM","couponNumber":"","couponInstances":"","couponRateCode":"","discountNumber":"","rateType":"","residency":"US","age":25,"wizardNumber":"","lastName":"","userSelectedCurrency":"","selDiscountNum":"","promotionalCoupon":"","preferredCarClass":"","membershipId":"","noMembershipAvailable":false,"corporateBookingType":"","enableStrikethrough":"true","amazonGCPayLaterPercentageVal":"","amazonGCPayNowPercentageVal":"","corporateEmailID":""}',
-    CURLOPT_HTTPHEADER => array(
-        'Content-Type: application/json',
-        'userName: AVISCOM',
-        'digital-token: ' . $digitoken,
-        'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
-        'cookie: ' . $mycookie
-    ),
-    ));
+curl_setopt_array($curl, array(
+  CURLOPT_URL => 'https://www.budget.com/webapi/reservation/vehicles',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'POST',
+  CURLOPT_POSTFIELDS =>'{"rqHeader":{"brand":"","locale":"en_US"},"nonUSShop":true,
+                        "pickInfo":"' . $add . '","pickDate":"' . $date . '","pickTime":"12:00 PM",
+                        "dropInfo":"' . $add . '","dropDate":"' . $dropDate . '","dropTime":"12:00 PM","couponNumber":"","couponInstances":"","couponRateCode":"","discountNumber":"","rateType":"","residency":"US","age":25,"wizardNumber":"","lastName":"","userSelectedCurrency":"","selDiscountNum":"","promotionalCoupon":"","preferredCarClass":"","membershipId":"","noMembershipAvailable":false,"corporateBookingType":"","enableStrikethrough":"true","amazonGCPayLaterPercentageVal":"","amazonGCPayNowPercentageVal":"","corporateEmailID":""}',
+  CURLOPT_HTTPHEADER => array(
+    'Accept: application/json, text/plain, */*',
+    'bookingType: car',
+    'channel: Digital',
+    'Content-Type: application/json',
+    'deviceType: bigbrowser',
+    'DIGITAL-TOKEN: ' . $digitoken,
+    'domain: us',
+    'initReservation: true',
+    'locale: en',
+    'password: BUDCOM',
+    'Referer: https://www.budget.com/en/home',
+    'sec-ch-ua: "Google Chrome";v="113", "Chromium";v="113", "Not-A.Brand";v="24"',
+    'sec-ch-ua-mobile: ?0',
+    'sec-ch-ua-platform: "Windows"',
+    'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+    'userName: BUDCOM',
+    'Cookie: ' . $mycookie
+  ),
+));
 
-    $response = curl_exec($curl);
-    // echo $response;
+$response = curl_exec($curl);
 
-    curl_close($curl);
+curl_close($curl);
+// echo $response;
+
 
     $datar = json_decode($response, false);
-    $state = '';
-    $city = '';
-    $Address = '';
-    $fullAddr = '';
+    $state = '-';
+    $city = '-';
+    $Address = '-';
+    $fullAddr = '-';
     if (property_exists($datar, 'reservationSummary')){
         $state = $datar->reservationSummary->pickLoc->address->state;
         $city = $datar->reservationSummary->pickLoc->address->city;
@@ -90,12 +102,14 @@ for ($c = 0; $c < count($adds); $c ++){
             $eachCar = $datar->vehicleSummaryList[$ca];
             $Class = $eachCar->carGroup;
             $Model = $eachCar->makeModel;
-            if (property_exists($eachCar, 'payNowRate')) 
+            $paynow = '-';
+            $paylater = '-';
+            if (property_exists($eachCar, 'payNowRate')) {
                 $paynow = $eachCar->payNowRate->amount . $eachCar->payNowRate->currency;
-            else $paynow = '';
-            if (property_exists($eachCar, 'payLaterRate')) 
+            }
+            if (property_exists($eachCar, 'payLaterRate')) {
                 $paylater = $eachCar->payLaterRate->amount . $eachCar->payLaterRate->currency;
-            else $paylater = '';
+            }
             $output = array(
                 'PickDate' => $date,
                 'DropDate' => $dropDate,

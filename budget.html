@@ -380,7 +380,7 @@
           }
         }
       };
-      xhr.open("GET", "./location.csv", true);
+      xhr.open("GET", "./location_budget.csv", true);
       xhr.send();
     }
     var suc = 0;
@@ -457,8 +457,8 @@
           // var newdataTableList = [];
           for (var i = 0; i < response.length; i++) {
             if (
-              response[i]["payNowPrice"].length > 1 &&
-              response[i]["payLaterPrice"].length > 1
+              response[i]["payNowPrice"] !="-" ||
+              response[i]["payLaterPrice"] != "-"
             ) {
               dataTableList.push([
                 response[i]["LocationCode"].toUpperCase(),
@@ -471,7 +471,7 @@
                 // response[i]["DropDate"],
                 response[i]["payNowPrice"],
                 response[i]["payLaterPrice"],
-                "<a href='" + response[i]["Link"] + "' > " + response[i]["Link"].replace('https://www.avis.com/en/locations/us/', '') + " </a>",
+                "<a href='" + response[i]["Link"] + "' > " + response[i]["Link"].replace('https://www.budget.com/en/locations/us/', '') + " </a>",
               ]);
               csvList.push([
                 response[i]["LocationCode"].toUpperCase(),

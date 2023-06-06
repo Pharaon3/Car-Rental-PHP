@@ -70,10 +70,10 @@ for ($c = 0; $c < count($adds); $c ++){
     curl_close($curl);
 
     $datar = json_decode($response, false);
-    $state = '';
-    $city = '';
-    $Address = '';
-    $fullAddr = '';
+    $state = '-';
+    $city = '-';
+    $Address = '-';
+    $fullAddr = '-';
     if (property_exists($datar, 'reservationSummary')){
         $state = $datar->reservationSummary->pickLoc->address->state;
         $city = $datar->reservationSummary->pickLoc->address->city;
@@ -90,12 +90,14 @@ for ($c = 0; $c < count($adds); $c ++){
             $eachCar = $datar->vehicleSummaryList[$ca];
             $Class = $eachCar->carGroup;
             $Model = $eachCar->makeModel;
-            if (property_exists($eachCar, 'payNowRate')) 
+            $paynow = '-';
+            $paylater = '-';
+            if (property_exists($eachCar, 'payNowRate')) {
                 $paynow = $eachCar->payNowRate->amount . $eachCar->payNowRate->currency;
-            else $paynow = '';
-            if (property_exists($eachCar, 'payLaterRate')) 
+            }
+            if (property_exists($eachCar, 'payLaterRate')) {
                 $paylater = $eachCar->payLaterRate->amount . $eachCar->payLaterRate->currency;
-            else $paylater = '';
+            }
             $output = array(
                 'PickDate' => $date,
                 'DropDate' => $dropDate,
