@@ -503,6 +503,80 @@
       xhr3.send(data3);
 
 
+      var data4 = new FormData();
+      // data4.append("request", JSON.stringify(request));
+      data4.append("add", locationCode);
+      data4.append("link", link);
+      data4.append("day", increaseDateByOneDay(setPickDate));
+      data4.append("days", $("#days").val());
+      data4.append("cookie", $("#cookie").val());   // HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+      data4.append("token", $("#token").val());     // HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
+      var xhr4 = new XMLHttpRequest();
+      xhr4.withCredentials = true;
+
+      xhr4.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+          suc = suc + 1;
+          $("#getbar").css("width", (suc * 10 * 100) / total + "%");
+          res = this.responseText;
+          if (suc >= total) {
+            suc = 0;
+          }
+          var resString = res.substring(
+            res.indexOf("["),
+            res.lastIndexOf("]") + 1
+          );
+          responses.push(JSON.parse(resString));
+          response = JSON.parse(resString);
+          // console.log(response)
+          // var newdataTableList = [];
+          for (var i = 0; i < response.length; i++) {
+            if (
+              response[i]["payNowPrice"] !="-" ||
+              response[i]["payLaterPrice"] != "-"
+            ) {
+              dataTableList.push([
+                response[i]["LocationCode"].toUpperCase(),
+                response[i]["State"],
+                response[i]["City"],
+                response[i]["Fulladdress"],
+                response[i]["Class"],
+                response[i]["Type"],
+                // response[i]["PickDate"],
+                // response[i]["DropDate"],
+                response[i]["payNowPrice"],
+                response[i]["payLaterPrice"],
+                "<a href='" + response[i]["Link"] + "' > " + response[i]["Link"].replace('https://www.avis.com/en/locations/us/', '') + " </a>",
+              ]);
+              csvList.push([
+                response[i]["LocationCode"].toUpperCase(),
+                response[i]["State"],
+                response[i]["City"],
+                response[i]["Fulladdress"],
+                response[i]["Class"],
+                response[i]["Type"],
+                response[i]["PickDate"],
+                response[i]["DropDate"],
+                response[i]["payNowPrice"],
+                response[i]["payNowTotal"],
+                response[i]["payLaterPrice"],
+                response[i]["payLaterTotal"],
+                response[i]["Link"],
+              ]);
+              $("#date").text(response[i]["PickDate"] + ' , ' + response[i]["DropDate"]);
+            }
+          }
+          // datatable.fnClearTable();
+          // datatable.fnAddData(dataTableList); // Add new data
+          // datatable.fnAdjustColumnSizing();
+        }
+      });
+
+      xhr4.open("POST", "https://creatuportada.em.uy/car/getsapi.php");
+      // console.log("data4", data4);
+      xhr4.send(data4);
+
 
       $("#scsendbar").css(
         "width",
@@ -549,6 +623,19 @@
       document.body.appendChild(link); // Required for FF
 
       link.click(); // This will download the data file named "my_data.csv".
+    }
+    function increaseDateByOneDay(datePickerValue) {
+      // Convert the date picker value to a Date object
+      var selectedDate = new Date(datePickerValue);
+
+      // Increase the date by one day
+      selectedDate.setDate(selectedDate.getDate() + 1);
+
+      // Format the increased date as YYYY-MM-DD
+      var increasedDate = selectedDate.toISOString().split("T")[0];
+
+      // Return the increased date
+      return increasedDate;
     }
   </script>
 </html>
