@@ -104,11 +104,15 @@ curl_close($curl);
             $Model = $eachCar->makeModel;
             $paynow = '-';
             $paylater = '-';
+            $paynowtotal = '-';
+            $paylatertotal = '-';
             if (property_exists($eachCar, 'payNowRate')) {
-                $paynow = $eachCar->payNowRate->amount . $eachCar->payNowRate->currency;
+                $paynow = $eachCar->payNowRate->amount;
+                $paynowtotal = $eachCar->payNowRate->totalRateAmount;
             }
             if (property_exists($eachCar, 'payLaterRate')) {
-                $paylater = $eachCar->payLaterRate->amount . $eachCar->payLaterRate->currency;
+                $paylater = $eachCar->payLaterRate->amount;
+                $paylatertotal = $eachCar->payLaterRate->totalRateAmount;
             }
             $output = array(
                 'PickDate' => $date,
@@ -121,6 +125,8 @@ curl_close($curl);
                 'Type' => $Model,
                 'payNowPrice' => $paynow,
                 'payLaterPrice' => $paylater,
+                'payNowTotal' => $paynowtotal,
+                'payLaterTotal' => $paylatertotal,
                 'Link' => $link
             );
             array_push($outputs, $output);

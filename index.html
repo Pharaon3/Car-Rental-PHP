@@ -346,6 +346,7 @@
     var setPickDate;
 
     function readCsv() {
+      suc = 0;
       setPickDate = $("#day").val();
       // mcookie = $("#cookie").val();
       // token = $("#token").val();
@@ -483,7 +484,9 @@
                 response[i]["PickDate"],
                 response[i]["DropDate"],
                 response[i]["payNowPrice"],
+                response[i]["payNowTotal"],
                 response[i]["payLaterPrice"],
+                response[i]["payLaterTotal"],
                 response[i]["Link"],
               ]);
               $("#date").text(response[i]["PickDate"] + ' , ' + response[i]["DropDate"]);
